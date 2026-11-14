@@ -74,6 +74,7 @@ svg .pop{transform-box:fill-box;transform-origin:center}
 .leg i{display:inline-block;width:14px;height:14px;border:3px solid var(--ink);margin-right:6px;vertical-align:-2px}
 @media(max-width:900px){.sb{position:fixed;left:0;top:0}.app:not(.closed) .sb{box-shadow:6px 0 0 var(--ink)}.app.closed .sb{margin-left:0}.big,.sub{max-width:100%}.g4,.g3{grid-template-columns:repeat(2,1fr)}.cast,.bb{display:none}.slide{overflow-y:auto}}
 @media(prefers-reduced-motion:reduce){.pop,.bar em,.lbl{animation:none}.big .ch{opacity:1}}
+:root.embed .back{display:none}
 </style>
 </head>
 <body>
@@ -254,6 +255,7 @@ svg .pop{transform-box:fill-box;transform-origin:center}
 var slides=[].slice.call(document.querySelectorAll('.slide')),N=slides.length,cur=0,app=document.getElementById('app'),
 toc=document.getElementById('toc'),tg=document.getElementById('tg'),pv=document.getElementById('pv'),nx=document.getElementById('nx'),
 dots=document.getElementById('dots'),pg=document.getElementById('pg'),timer=null,collapsed={},groups=[],items=[];
+if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('embed');
 var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
 slides.forEach(function(s,i){var g=s.dataset.group;if(!groups.length||groups[groups.length-1].name!==g)groups.push({name:g,idx:[]});groups[groups.length-1].idx.push(i);});
 groups.forEach(function(g,gi){
