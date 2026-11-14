@@ -1,0 +1,1133 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>1. 구글 가계부</title>
+<meta name="description" content="구글 시트와 자동 연동되는 가계부 대시보드" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="구글 가계부" />
+<meta property="og:title" content="1. 구글 가계부 대시보드" />
+<meta property="og:description" content="구글 시트와 자동 연동되는 월별 가계부 대시보드" />
+<meta property="og:image" content="https://ace2013sk-debug.github.io/household-budget-agent/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="https://ace2013sk-debug.github.io/household-budget-agent/" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://ace2013sk-debug.github.io/household-budget-agent/og-image.png" />
+  <style>
+    .donut-hover-tooltip{position:fixed;z-index:9999;display:block;padding:6px 8px;border-radius:4px;background:#292929;box-shadow:0 2px 7px rgba(0,0,0,.3);color:#fff;font-size:12px;font-weight:700;line-height:1.25;white-space:nowrap;pointer-events:none}.donut-hover-tooltip[hidden]{display:none}
+  </style>
+  <style>
+  </style>
+  <style>
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-grid button.selected{background:var(--detail-label-color);color:#fff}
+  </style>
+  <style>
+    .period .month[hidden]{display:none!important}
+    :root{--blue:#405DE6;--purple:#833AB4;--pink:#E1306C;--red:#FD1D1D;--orange:#F77737;--yellow:#FCB045;--ink:#23304a;--muted:#7c879d;--line:#e1e6f2;--card:#fff}
+    *{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden}body{font-family:Pretendard,"Apple SD Gothic Neo",Arial,sans-serif;color:var(--ink);background:linear-gradient(135deg,#eef0ff 0%,#fff7f3 50%,#fff 100%);font-size:13px}button,select{font:inherit}.shell{height:100vh;display:grid;grid-template-columns:155px minmax(0,1fr);overflow:hidden}.sidebar{height:100vh;background:rgba(255,255,255,.86);border-right:1px solid var(--line);display:flex;flex-direction:column;overflow:hidden}.brand{height:63px;padding:0 13px;display:flex;align-items:center;color:#fff;font-weight:800;font-size:14px;background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue))}.brand-mark{font-size:17px;margin-right:6px}.menu{padding:10px 8px;display:flex;flex-direction:column;gap:5px;overflow:hidden}.menu-label{font-size:10px;color:#a0a9bc;padding:9px 12px 3px}.nav-item{border:0;border-left:3px solid transparent;background:transparent;border-radius:14px;padding:9px 10px;text-align:left;color:#5d6880;cursor:pointer;font-weight:700}.nav-item:hover,.nav-item.active{color:var(--purple);background:linear-gradient(135deg,#ffeaf3,#eef0ff);border-left-color:var(--pink)}.nav-icon{display:inline-grid;place-items:center;width:22px;height:22px;margin-right:3px;border-radius:8px;background:#eef0ff;color:var(--blue);font-size:12px}.chat{margin:auto 12px 12px;border:0;border-radius:16px;background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff;padding:10px 8px;font-weight:800;cursor:pointer}.main{height:100vh;padding:14px 22px;overflow:hidden;display:flex;flex-direction:column;gap:10px;min-width:0}.topline{height:56px;flex:0 0 56px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.9);box-shadow:0 12px 28px rgba(64,93,230,.07)}.eyebrow{font-size:11px;font-weight:800;color:var(--pink)}h1{font-size:21px;letter-spacing:-.04em;margin:1px 0}.small{font-size:11px;color:var(--muted)}.actions{display:flex;align-items:center;gap:8px}.status{padding:7px 10px;border-radius:999px;font-size:11px}.status.live{color:#247758;background:#eafaf2}.status.fallback{color:#a56618;background:#fff1da}.button{border:1px solid var(--orange);border-radius:999px;background:var(--orange);color:#fff;padding:8px 13px;font-weight:800;cursor:pointer}.period{flex:0 0 48px;display:flex;align-items:center;gap:6px;padding:0 14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.9);overflow:hidden}.period-title{font-size:11px;color:var(--muted);margin-right:4px}.month{border:1px solid #d9def0;background:#fff;color:#56627b;border-radius:999px;padding:7px 12px;cursor:pointer;white-space:nowrap}.month.active{color:#fff;background:var(--blue);border-color:var(--blue)}.filters{position:absolute;top:83px;right:38px;display:flex;gap:6px}.filter{height:31px;border:1px solid #d9def0;border-radius:999px;background:#fff;color:#56627b;padding:0 10px}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:0 0 70px}.card,.kpi{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);box-shadow:0 10px 26px rgba(64,93,230,.07)}.kpi{padding:14px 16px;display:flex;align-items:center;justify-content:space-between}.kpi-label{font-size:11px;color:#68758e}.kpi-value{font-size:23px;font-weight:900;letter-spacing:-.05em}.kpi:nth-child(1) .kpi-value{color:var(--purple)}.kpi:nth-child(2) .kpi-value{color:var(--blue)}.kpi:nth-child(3) .kpi-value{color:var(--pink)}.kpi:nth-child(4) .kpi-value{color:var(--red)}.kpi-note{font-size:10px;color:#a1a9ba}.layout{flex:1;min-height:0;display:grid;grid-template-columns:1.06fr .94fr;grid-template-rows:minmax(250px,1.15fr) minmax(220px,1fr);gap:10px}.layout>.card{min-height:0;overflow:hidden;padding:14px 16px}.layout>#trend{grid-column:1;grid-row:2}.layout>#donutDetail{grid-column:2;grid-row:2}.layout>#recentTransactions{display:none}.card h2,.card h3{margin:0 0 10px;font-size:14px}.progress-track{height:10px;background:#e9ecf6;border-radius:999px;overflow:hidden}.progress-track i{display:block;height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:inherit}.progress-meta{display:flex;justify-content:space-between;margin:6px 0 12px;font-size:10px;color:var(--muted)}.overview-donut-layout{display:grid;grid-template-columns:180px 1fr;gap:16px;align-items:center}.overview-donut{width:175px;height:175px;border-radius:50%;display:grid;place-items:center;position:relative;margin:auto}.overview-donut:after{content:"";position:absolute;width:94px;height:94px;border-radius:50%;background:#fff}.overview-donut-center{z-index:1;text-align:center;color:var(--muted);font-size:11px}.overview-donut-center strong{display:block;color:var(--ink);font-size:17px;margin-top:4px}.mini-legend,.detail-legend{list-style:none;padding:0;margin:0}.mini-legend li{display:grid;grid-template-columns:9px 1fr auto;gap:7px;padding:6px 0;border-bottom:1px solid var(--line);font-size:11px}.mini-swatch{width:8px;height:8px;border-radius:50%}.mini-legend b,.detail-legend b{font-size:10px}.bar-row{display:grid;grid-template-columns:110px 1fr 88px;align-items:center;gap:9px;margin:11px 0;font-size:11px}.bar{height:9px;background:#eef0f7;border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:inherit}.bar-row b{text-align:right;font-size:10px}.trend-wrap{height:calc(100% - 28px);overflow:hidden}.trend-chart{width:100%;height:100%}.trend-grid{stroke:#e8ecf4;stroke-width:1}.trend-axis{fill:#7a849a;font-size:11px}.trend-line{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}.trend-area{fill:url(#overviewArea)}.trend-dot{fill:#fff;stroke:var(--pink);stroke-width:3}.trend-value{fill:var(--ink);font-size:11px;font-weight:800}.detail-donut-layout{display:grid;grid-template-columns:220px 1fr;gap:14px;align-items:center;height:calc(100% - 30px)}.detail-donut{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;position:relative;margin:auto}.detail-donut:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:#fff}.detail-donut-center{z-index:1;text-align:center;color:var(--muted);font-size:11px}.detail-donut-center strong{display:block;color:var(--ink);font-size:18px;margin-top:4px}.detail-legend{max-height:230px;overflow:hidden}.detail-legend li{display:grid;grid-template-columns:9px 1fr auto;gap:7px;align-items:center;border-bottom:1px solid var(--line);padding:6px 0;font-size:11px}.empty{color:var(--muted);padding:18px;text-align:center}main[data-screen="overview"]>#donutDetail,main[data-screen="overview"]>#trend,main[data-screen="overview"]>#recentTransactions{display:none}main[data-screen="donut"]>.topline,main[data-screen="donut"]>.period,main[data-screen="donut"]>.filters,main[data-screen="donut"]>.kpis,main[data-screen="donut"]>.layout,main[data-screen="donut"]>#trend,main[data-screen="donut"]>#recentTransactions{display:none}main[data-screen="trend"]>.topline,main[data-screen="trend"]>.period,main[data-screen="trend"]>.filters,main[data-screen="trend"]>.kpis,main[data-screen="trend"]>.layout,main[data-screen="trend"]>#donutDetail,main[data-screen="trend"]>#recentTransactions{display:none}main[data-screen="transactions"]>.topline,main[data-screen="transactions"]>.period,main[data-screen="transactions"]>.filters,main[data-screen="transactions"]>.kpis,main[data-screen="transactions"]>.layout,main[data-screen="transactions"]>#donutDetail,main[data-screen="transactions"]>#trend{display:none}main[data-screen="transactions"]>#recentTransactions{display:block;flex:1;min-height:0;overflow:hidden;padding:16px}.table-wrap{overflow:hidden}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}.table th{font-size:10px;color:var(--muted)}.table td{font-size:11px}.money{text-align:right!important;font-weight:800}.pill{padding:4px 8px;border-radius:999px;background:#f2ecff;color:var(--purple)}@media(max-width:900px){.shell{grid-template-columns:120px 1fr}.sidebar .nav-item{font-size:11px;padding:7px 6px}.main{padding:10px}.period{overflow:hidden}.filters{position:static;order:0}.layout{grid-template-columns:1fr 1fr}.overview-donut-layout{grid-template-columns:130px 1fr}.overview-donut{width:130px;height:130px}.overview-donut:after{width:70px;height:70px}}@media(max-width:650px){.shell{grid-template-columns:1fr}.sidebar{display:none}.kpis{grid-template-columns:repeat(2,1fr);flex-basis:130px}.period{flex-wrap:nowrap}.layout{grid-template-columns:1fr;grid-template-rows:1fr 1fr}.layout>#trend,.layout>#donutDetail{grid-column:1}.layout>#trend{grid-row:2}.layout>#donutDetail{grid-row:3}.overview-donut-layout,.detail-donut-layout{grid-template-columns:1fr}.overview-donut,.detail-donut{width:120px;height:120px}.overview-donut:after,.detail-donut:after{width:64px;height:64px}}
+ </style>
+  <style>main[data-screen="overview"]>.layout{grid-template-columns:0.7fr 1.3fr}main[data-screen="overview"]>.layout>#trend{display:none!important}main[data-screen="overview"]>.layout>#donut{grid-column:1;grid-row:1}main[data-screen="overview"]>.layout>#donut>.progress-track,main[data-screen="overview"]>.layout>#donut>.progress-meta{display:none!important}main[data-screen="overview"]>.layout>#categories{grid-column:2;grid-row:1 / span 2;display:block!important;padding:10px 12px}main[data-screen="overview"]>.layout>#donutDetail{grid-column:1;grid-row:2;display:block}</style>
+  <style>
+    main[data-screen="donut"]>.layout,main[data-screen="trend"]>.layout,main[data-screen="transactions"]>.layout{display:block;flex:1;min-height:0}
+    main[data-screen="donut"]>.layout>#donut,main[data-screen="trend"]>.layout>#trend,main[data-screen="transactions"]>.layout>#recentTransactions{display:block;height:100%}
+    main[data-screen="donut"]>.layout>#categories,main[data-screen="donut"]>.layout>#trend,main[data-screen="donut"]>.layout>#donutDetail,main[data-screen="donut"]>.layout>#recentTransactions,main[data-screen="trend"]>.layout>#donut,main[data-screen="trend"]>.layout>#categories,main[data-screen="trend"]>.layout>#donutDetail,main[data-screen="trend"]>.layout>#recentTransactions,main[data-screen="transactions"]>.layout>#donut,main[data-screen="transactions"]>.layout>#categories,main[data-screen="transactions"]>.layout>#trend,main[data-screen="transactions"]>.layout>#donutDetail{display:none}
+    /* CORE_SUMMARY_VIEWPORT_GUARD: keep the header legend and two-column chart grid inside the available viewport. */
+    .core-summary-head{width:100%;min-width:0}.core-summary-head>div:first-child{min-width:0}.core-legend{min-width:0;max-width:58%;flex:0 1 auto}.core-main{min-width:0}.core-chart-card,.core-donut-card,.core-donut-stack,.core-chart-wrap,.core-donut-box,.core-donut-legend{min-width:0}.core-donut-legend li{grid-template-columns:9px minmax(0,1fr) auto}.core-chart-title-row{position:relative;display:flex;align-items:center;min-height:24px}.core-chart-title-row h3{margin:0}.core-chart-title-row .core-legend{position:absolute;left:50%;transform:translateX(-50%);max-width:none;flex-wrap:nowrap;white-space:nowrap;justify-content:center}
+    main:not([data-screen="monthly-donuts"])>#monthlyDonutScreen{display:none !important}main[data-screen="monthly-donuts"]>*:not(#monthlyDonutScreen){display:none !important}main[data-screen="monthly-donuts"]>#monthlyDonutScreen{display:flex !important;flex-direction:column;flex:1;min-width:0;min-height:0;padding:18px 20px;gap:14px}.monthly-donut-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.monthly-donut-head h2{margin:4px 0 5px;font-size:18px}.monthly-donut-head p{margin:0;color:var(--muted);font-size:11px}.monthly-donut-source{padding:7px 10px;border-radius:999px;background:#eafaf2;color:#247758;font-size:11px;font-weight:800}.monthly-donut-grid{display:grid;grid-template-columns:110px repeat(8,minmax(74px,1fr));grid-template-rows:repeat(3,1fr);gap:10px;flex:1;min-height:0;padding:18px 8px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);overflow:hidden}.monthly-donut-row{display:contents}.monthly-donut-label{align-self:center;display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:800}.monthly-donut-label-budget{color:#9aa4ba;font-size:10px;font-weight:700}.monthly-donut-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0}.monthly-donut-month{font-size:12px;color:var(--muted);font-weight:800}.monthly-donut{width:82px;height:82px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--monthly-donut-color) var(--monthly-donut-progress),#d9dce4 0)}.monthly-donut::after{content:"";position:absolute;width:45px;height:45px;border-radius:50%;background:#fff}.monthly-donut strong{z-index:1;color:var(--monthly-donut-color);font-size:13px;font-weight:800}.monthly-donut-cell small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#9aa4ba;font-size:12px}.monthly-donut-cell small:last-child{color:var(--monthly-donut-color)}
+  </style>
+  <style>
+    .raw-data-screen *{font-size:10px !important}
+    main:not([data-screen="raw-data"])>#rawDataScreen{display:none !important}main[data-screen="raw-data"]>*:not(#rawDataScreen){display:none !important}main[data-screen="raw-data"]>#rawDataScreen{display:flex !important;flex-direction:column;flex:1;min-height:0;padding:14px 18px;gap:10px}
+    .raw-data-head{display:flex;align-items:center;justify-content:space-between;gap:14px;min-height:42px}.raw-data-head h2{margin:0;font-size:18px}.raw-data-head p{margin:3px 0 0;color:var(--muted);font-size:11px}.raw-data-status{padding:7px 10px;border-radius:999px;background:#eafaf2;color:#247758;font-size:11px;font-weight:800;white-space:nowrap}.raw-data-period{display:flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.9);overflow:hidden}.raw-data-period span{font-size:11px;color:var(--muted);margin-right:3px}.raw-data-period button,.raw-data-pager button,.raw-secondary-pager button{border:1px solid #d9def0;background:#fff;color:#56627b;border-radius:999px;padding:5px 9px;cursor:pointer;white-space:nowrap;font-size:11px}.raw-data-period button.active,.raw-data-pager button.active,.raw-secondary-pager button.active{color:#fff;background:var(--blue);border-color:var(--blue)}.raw-data-period .divider{height:22px;border-left:1px solid var(--line);margin:0 3px}.raw-data-pager,.raw-secondary-pager{display:flex;align-items:center;justify-content:center;gap:5px;margin-top:8px}.raw-data-pager span,.raw-secondary-pager span{font-size:10px;color:var(--muted);margin:0 5px}
+    .sheet-canvas{display:grid;grid-template-columns:1.05fr 1.2fr .95fr;gap:10px;flex:1;min-width:0;min-height:0;overflow:hidden}.raw-data-grid{display:contents}.raw-data-panel{min-width:0;min-height:0;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.94);padding:12px;overflow:hidden}.raw-data-panel h3{margin:0 0 8px;font-size:13px}.raw-data-sub{color:var(--muted);font-size:10px;margin-left:4px}.raw-data-table-wrap{height:calc(100% - 28px);overflow:hidden}.raw-data-table{width:100%;border-collapse:collapse;table-layout:fixed}.raw-data-table th,.raw-data-table td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:10px}.raw-data-table th{background:#405DE6;color:#fff;font-weight:800}.raw-data-table th.money,.raw-data-table td.money{text-align:right}.raw-data-table td.amount{font-weight:800;text-align:right}.raw-data-table tbody tr:nth-child(even){background:#f8f9fd}.raw-data-account{display:grid;grid-template-columns:1fr auto auto;gap:6px;padding:7px 0;border-bottom:1px solid var(--line);font-size:10px;align-items:center}.raw-data-account b{text-align:right}.raw-data-account em{font-style:normal;color:var(--purple);font-weight:800;text-align:right}.raw-data-card-list{display:grid;grid-template-columns:1fr auto;gap:0 8px;font-size:10px}.raw-data-card-list span,.raw-data-card-list b{padding:7px 0;border-bottom:1px solid var(--line)}.raw-data-card-list b{text-align:right}.raw-data-empty{color:var(--muted);padding:18px;text-align:center;font-size:11px}
+    @media(max-width:900px){.sheet-canvas{grid-template-columns:1fr 1fr}.raw-data-panel:first-child{grid-column:1 / -1}.raw-data-panel.sheet-block-secondary{grid-column:1 / -1}}
+    @media(max-width:650px){.sheet-canvas{grid-template-columns:1fr}.raw-data-panel:first-child,.raw-data-panel.sheet-block-secondary{grid-column:auto}}
+    .sheet-cell{background:#fff;border-right:1px solid #fff}.sheet-header-blue{background:#405DE6 !important;color:#fff !important;border-color:#fff !important}.sheet-header-green{background:#2aa85a !important;color:#fff !important;border-color:#fff !important}.sheet-block-secondary{background:#f8fbff}.sheet-block-secondary .raw-data-table tbody tr:nth-child(even){background:#eef5fb}.sheet-block-secondary .raw-data-table th{background:#2aa85a}.sheet-block-secondary .raw-data-table td{border-color:#d8e4f0}
+    .sheet-member-table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:8px}.sheet-member-table th,.sheet-member-table td{padding:2px 3px;border:1px solid #fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:8px;line-height:1.1}.sheet-member-table th{font-weight:800}.sheet-member-table .sheet-merged{text-align:left;font-weight:900}.sheet-member-section td{border-bottom-color:#fff}.sheet-member-title{font-weight:900}.sheet-member-image{width:24px;text-align:center;font-size:11px;vertical-align:middle}.sheet-member-label{font-weight:900}.sheet-summary-label{font-weight:800;text-align:right}.sheet-summary-value{text-align:right;font-weight:800}.sheet-summary-negative{color:var(--red)}.sheet-summary-rate{text-align:right;font-weight:900}.sheet-detail-row td:nth-child(n+2){text-align:right}.sheet-payment-block{margin-top:5px;border-top:2px solid #fff;background:#d9eafa}.sheet-payment-block h4{margin:0;padding:3px 5px;font-size:9px;background:#bdd6ee}.sheet-payment-row{display:grid;grid-template-columns:1fr auto;padding:2px 5px;border-bottom:1px solid #fff;font-size:8px}.sheet-payment-row b{text-align:right}
+    .sheet-filter-line{display:flex;gap:4px;margin:0 0 5px}.sheet-filter-line select{min-width:0;flex:1;border:1px solid #c9d8ef;border-radius:5px;background:#fff;color:#40506e;font-size:8px;padding:3px 4px}.raw-data-panel h3{min-width:0;white-space:normal;overflow:visible;overflow-wrap:anywhere;word-break:keep-all;text-overflow:clip;line-height:1.25}.raw-data-filter-result{display:inline-flex;flex:0 0 auto;align-self:center;margin-left:0;margin-right:2px;text-align:right;white-space:nowrap}.sheet-block-secondary .sheet-filter-line{min-width:0}.sheet-block-secondary .sheet-filter-line select{min-width:0;font-size:10px}.sheet-block-secondary h3{font-size:15px}.sheet-block-secondary .raw-data-sub{font-size:12px}.sheet-block-secondary .raw-data-table th,.sheet-block-secondary .raw-data-table td{font-size:12px}.sheet-block-secondary .sheet-filter-line select{font-size:12px}.sheet-block-secondary .raw-secondary-pager{font-size:12px;margin-top:0;flex:0 0 auto}
+  </style>
+ <style>
+    .sheet-summary{flex:0 0 158px;padding:5px;overflow:hidden;display:flex;flex-direction:column}
+    .sheet-summary-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+    .sheet-summary-head h3{margin:0;font-size:13px}
+    .sheet-summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;min-height:0;flex:1}
+    .sheet-total-row{display:grid;grid-template-columns:110px 90px 1fr;align-items:center;gap:10px;font-size:10px;color:var(--muted);margin-bottom:5px}
+    .sheet-total-row>b{font-size:15px;color:var(--purple)}
+    .sheet-total-row strong{color:var(--ink)}
+    .account-rows{display:grid;grid-template-columns:repeat(2,1fr);gap:3px 14px}
+    .account-row{display:grid;grid-template-columns:1fr 82px 38px;align-items:center;gap:5px;border-top:1px solid var(--line);padding:4px 0;font-size:10px}
+    .account-row b{text-align:right;color:var(--ink)}
+    .account-row em{font-style:normal;text-align:right;color:var(--blue);font-weight:800}
+    .account-row em.negative{color:var(--red)}
+    .sheet-donuts{display:flex;align-items:center;justify-content:space-around;gap:8px;border-left:1px solid var(--line)}
+    .sheet-donut-item{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:8px;font-size:10px;color:var(--muted);white-space:nowrap;min-width:0}
+    .sheet-donut-meta{display:flex;flex-direction:column;gap:1px;font-size:10px;line-height:1.15}
+    .sheet-donut-meta b{font-size:10px;color:var(--ink);font-weight:800}
+    .sheet-donut-meta span{font-size:10px}
+    .sheet-donut{width:80px;height:80px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--donut-color) var(--donut-progress),#e5e8ef 0)}
+    .sheet-donut:after{content:"";position:absolute;width:38px;height:38px;border-radius:50%;background:#fff}
+    .sheet-donut{position:relative}.sheet-donut strong{position:absolute;inset:0;z-index:1;color:var(--donut-color);font-size:12px;display:grid;place-items:center;line-height:1.1}.sheet-donut small{font-size:9px;color:var(--donut-color)}
+    .top-summary-donut{background:conic-gradient(#e5e8ef 0 calc(100% - var(--donut-progress)),var(--donut-color) 0)}
+    main[data-screen="donut"]>.sheet-summary,main[data-screen="trend"]>.sheet-summary,main[data-screen="transactions"]>.sheet-summary{display:none}
+    @media(max-width:900px){.sheet-summary{flex-basis:170px}.sheet-summary-grid{grid-template-columns:1fr}.sheet-donuts{border-left:0;border-top:1px solid var(--line);padding-top:5px}.account-rows{grid-template-columns:repeat(3,1fr)}}
+  </style>
+  <style>
+    .topline-controls{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+    .topline-controls .period{height:42px;flex:0 1 auto;border:0;background:transparent;padding:0;box-shadow:none}
+    .topline-controls .filters{position:static;display:flex;gap:6px;margin-left:auto}
+    .topline-controls .filter{height:32px}
+    main[data-screen="overview"]>.topline{order:1}
+    main[data-screen="overview"]>.kpis{order:2}
+    main[data-screen="overview"]>.sheet-summary{order:3}
+    main[data-screen="overview"]>.layout{order:4}
+    @media(max-width:900px){.topline-controls{gap:5px}.topline-controls .period{overflow:hidden}.topline-controls .month{padding:6px 8px}.topline-controls .filters{display:none}}
+  </style>
+  <style>
+    main:not([data-screen="core"])>#coreSummary{display:none !important}
+    main[data-screen="core"]>*:not(#coreSummary){display:none !important}
+    main[data-screen="core"]>#coreSummary{display:flex !important;flex-direction:column;flex:1;min-height:0;padding:14px 18px;gap:10px}
+    .core-periodbar{height:44px;flex:0 0 44px;display:flex;align-items:center;gap:6px;padding:0 12px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.9);overflow:hidden;color:var(--muted);font-size:11px}.core-month{border:1px solid #d9def0;background:#fff;color:#56627b;border-radius:999px;padding:6px 11px;cursor:pointer;white-space:nowrap}.core-month.active{color:#fff;background:var(--blue);border-color:var(--blue)}.core-filter{height:30px;margin-left:auto;border:1px solid #d9def0;border-radius:999px;background:#fff;color:#56627b;padding:0 10px}.core-filter + .core-filter{margin-left:0}
+    .core-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;flex:0 0 70px}.core-kpi{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);padding:11px 14px;display:grid;grid-template-columns:1fr auto;grid-template-rows:1fr 1fr;align-items:center}.core-kpi small{color:var(--muted);font-size:10px}.core-kpi strong{font-size:21px;line-height:1;text-align:right}.core-kpi span{grid-column:1 / -1;color:#a1a9ba;font-size:10px}.core-kpi:nth-child(1) strong{color:#0A9F55}.core-kpi:nth-child(2) strong{color:var(--blue)}.core-kpi:nth-child(3) strong{color:var(--red)}.core-kpi:nth-child(4) strong{color:var(--purple)}
+    .core-main{display:grid;grid-template-columns:minmax(0,1fr) 405px;gap:10px;flex:1;min-height:0}.core-chart-card,.core-donut-card{min-height:0;padding:14px 16px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);box-shadow:0 10px 26px rgba(64,93,230,.07);overflow:hidden}.core-chart-card{display:flex;flex-direction:column}.core-chart-card h3,.core-donut-card h3{margin:0 0 8px;font-size:14px}.core-chart-wrap{flex:1;width:100%;min-height:0;margin:0}.core-donut-stack{display:grid;grid-template-rows:1fr 1fr;gap:10px;min-height:0}.core-donut-card{display:flex;flex-direction:column}.core-donut-box{display:grid;grid-template-columns:190px 1fr;align-items:center;gap:10px;flex:1;min-height:0}.core-donut{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;position:relative;margin:auto}.core-donut::after{content:"";position:absolute;width:102px;height:102px;border-radius:50%;background:#fff}.core-donut>div{z-index:1;text-align:center;color:var(--core-donut-title);font-size:11px}.core-donut strong{display:block;color:var(--ink);font-size:16px}.core-donut span{display:block;font-size:10px;font-weight:800;margin-top:3px}.core-donut-legend{list-style:none;padding:0;margin:0;max-height:180px;overflow:hidden}.core-donut-legend li{display:grid;grid-template-columns:9px 1fr auto;gap:6px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:10px}.core-donut-legend i{width:8px;height:8px;border-radius:50%}.core-donut-legend b{font-size:9px;text-align:right}.core-donut-empty{grid-template-columns:1fr!important;color:var(--muted)}
+    .overview-donut-layout{display:block;position:relative;height:100%}.overview-donut-layout>#overviewDonutLegend{display:none}.overview-expense-reference{position:relative;flex:1;min-height:0;height:100%;display:flex;align-items:center;justify-content:center}.overview-expense-donut{width:190px;height:190px;border-radius:50%;display:grid;place-items:center;position:relative}.overview-expense-donut:after{content:"";position:absolute;width:102px;height:102px;border-radius:50%;background:#fff}.overview-expense-donut>div{z-index:1;text-align:center}.overview-expense-donut strong{font-size:18px;color:var(--ink)}.overview-expense-label{position:absolute;display:flex;flex-direction:column;gap:2px;color:var(--label-color);font-size:10px;line-height:1.05;white-space:nowrap}.overview-expense-label:after{content:"";position:absolute;border-top:2px solid var(--label-color);width:42px;top:50%;opacity:.8}.overview-expense-label b{display:flex;flex-direction:column;color:var(--label-color);font-size:12px}.overview-expense-label small{font-size:11px}.overview-expense-label-0{left:calc(50% - 270px);right:auto;top:calc(50% - 70px);align-items:flex-start}.overview-expense-label-0:after{left:100%;margin-left:4px}.overview-expense-label-1{left:calc(50% - 320px);top:50%;transform:translateY(-50%);align-items:flex-end;text-align:right}.overview-expense-label-1:after{left:100%;margin-left:4px}.overview-expense-label-2{right:calc(50% - 320px);left:auto;top:50%;bottom:auto;transform:translateY(-50%);align-items:flex-start;text-align:left}.overview-expense-label-2:after{right:100%;left:auto;margin-right:4px}.overview-expense-legend{position:absolute;bottom:2px;left:0;right:0;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:10px}.overview-expense-legend span{display:inline-flex;align-items:center;gap:3px}.overview-expense-legend i{width:7px;height:7px;border-radius:50%}
+    @media(max-width:1000px){.core-main{grid-template-columns:minmax(0,1fr) 330px}.core-donut-box{grid-template-columns:130px 1fr}.core-donut{width:130px;height:130px}.core-donut::after{width:72px;height:72px}.core-kpi strong{font-size:17px}}
+    .core-summary-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;width:100%;min-width:0}.core-summary-head>div:first-child{min-width:0}
+    .topline-controls .year{border:1px solid #d9def0;background:#fff;color:#56627b;border-radius:999px;padding:7px 11px;cursor:pointer;white-space:nowrap}.topline-controls .year.active{color:#fff;background:var(--blue);border-color:var(--blue)}.year-divider{height:24px;border-left:1px solid #d9def0;margin:0 3px}
+    .core-summary-head h2{margin:4px 0 5px;font-size:18px;color:var(--ink)}
+    .core-summary-head p{margin:0;color:var(--muted);font-size:11px}
+    .core-legend{display:flex;align-items:center;gap:12px;flex:0 1 auto;min-width:0;max-width:58%;flex-wrap:wrap;justify-content:flex-end;font-size:11px;color:var(--muted)}
+    .core-pill{background:var(--orange);color:#fff;border-radius:999px;padding:6px 10px;font-weight:800}
+    .core-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px}.core-dot.income{background:var(--blue)}.core-dot.expense{background:var(--red)}.core-dot.saving{background:var(--pink)}.core-dot.living{background:#405DE6}.core-dot.couple{background:#833AB4}.core-dot.outside{background:#E1306C}.core-dot.bomnae{background:#FD1D1D}.core-dot.business{background:#F77737}
+    .core-chart-wrap{flex:1;width:100%;min-height:0;margin:0}.core-summary-chart{width:100%;height:100%;overflow:visible}
+    .core-grid{stroke:#e8ecf4;stroke-width:1}.core-axis{stroke:#6c7890;stroke-width:2}.core-axis-label,.core-month-label{fill:#68758e;font-size:12px}
+    .core-owner-line{fill:none;stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round;opacity:.92}.core-point-label rect{fill:rgba(255,255,255,.96);stroke:currentColor;stroke-width:1.3}.core-point-label text{fill:currentColor;font-size:11px;font-weight:500}.core-empty{fill:var(--muted);font-size:15px}
+    @media(max-width:900px){.core-summary-head{display:block}.core-legend{justify-content:flex-start;margin-top:10px}.core-value-card{display:none}.core-axis-label,.core-month-label{font-size:10px}}
+  </style>
+  <style>
+    /* Reference sidebar contract: 165px */
+    .progress-track i{background:linear-gradient(90deg,var(--yellow),var(--blue))}
+    .bar i{background:linear-gradient(90deg,var(--orange),var(--blue))}
+    .layout{grid-template-columns:1fr 1fr}
+    .dashboard-viewport{position:relative;width:100vw;height:100vh;overflow:hidden}
+    .shell{position:absolute;top:0;left:0;width:1920px;height:984px;grid-template-columns:165px minmax(0,1fr);transform-origin:top left;will-change:transform;zoom:min(calc(100vw / 1920px),calc(100vh / 984px),1)}
+    .sidebar,.main{height:984px}
+    .monthly-donut-period{display:flex;align-items:center;gap:6px;height:42px;flex:0 0 42px;padding:0 14px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.9)}.monthly-donut-period>span:first-child{font-size:11px;color:var(--muted);margin-right:4px}.monthly-donut-period .year{border:1px solid #d9def0;background:#fff;color:#56627b;border-radius:999px;padding:7px 11px;cursor:pointer;white-space:nowrap}.monthly-donut-period .year.active{color:#fff;background:var(--blue);border-color:var(--blue)}
+  </style>
+  <style>
+    main[data-screen="overview"]>.topline{order:1}
+    main[data-screen="overview"]>.sheet-summary{order:2}
+    main[data-screen="overview"]>.kpis{order:3}
+    main[data-screen="overview"]>.layout{order:4}
+    main[data-screen="overview"]>.kpis{display:none!important}
+    main[data-screen="overview"]>.topline{height:45px;flex:0 0 45px}
+    /* Harness: enlarge the uploaded summary region by 110% (101px -> 111px). */
+    main[data-screen="overview"]>.sheet-summary{flex:0 0 111px}
+    /* Harness: keep RAW DATA and 구분_1 월별 on the same vertical boundary. */
+    main[data-screen="overview"] #categories{height:calc(60% - 58px);align-self:flex-start}
+    .sheet-summary-grid>#sheetDonuts{order:1;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);padding:8px 12px}
+    .sheet-summary-grid>.sheet-account-panel{order:2;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.92);padding:8px 12px}
+    .member-donuts{display:flex;align-items:center;justify-content:space-around;gap:10px;height:100%}.member-donut-item{display:flex;align-items:center;gap:8px;min-width:0}.member-donut-item .sheet-donut-meta{min-width:0}.member-donut-item .sheet-donut-meta b,.member-donut-item .sheet-donut-meta span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .sheet-summary-head .small{font-size:12px}
+    .sheet-summary .sheet-total-row{font-size:12px}
+    .sheet-summary .sheet-total-row>b{font-size:17px}
+    .sheet-summary .account-row{font-size:12px}
+    .sheet-summary .sheet-donut-item{font-size:12px}
+    .sheet-summary .sheet-donut-meta{font-size:12px}
+    .sheet-summary .sheet-donut-meta b,.sheet-summary .sheet-donut-meta span{font-size:12px}
+    .sheet-summary .sheet-donut strong{font-size:14px}
+    .member-donuts,.sheet-donuts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;gap:10px;height:100%;border-left:0}
+    .member-donut-item,.sheet-donut-item{display:flex;align-items:center;gap:8px}
+    .overview-raw-secondary .raw-data-panel{height:100%;border:0;box-shadow:none;background:transparent;padding:0}.overview-raw-secondary .raw-data-panel h3{font-size:14px;margin-bottom:8px}.overview-raw-secondary .raw-data-table-wrap{height:calc(100% - 52px)}
+    .detail-reference-layout{display:grid;grid-template-columns:190px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 22px;gap:8px 14px;height:calc(100% - 25px);min-height:0}.detail-reference-filters{grid-row:1 / span 2;border:1px solid var(--line);border-radius:14px;padding:8px 7px;min-height:0;overflow:hidden}.detail-reference-filter-head{display:grid;grid-template-columns:1fr 1fr;text-align:center;color:var(--muted);font-size:10px;border-bottom:1px solid var(--line);padding-bottom:5px}.detail-reference-filter-grid{display:flex;flex-direction:column;gap:5px;padding-top:7px}.detail-reference-filter-grid button{border:1px solid var(--detail-label-color);background:#fff;color:var(--detail-label-color);border-radius:999px;padding:4px 7px;font-size:10px;font-weight:800;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.detail-reference-filter-grid button:nth-child(2n){margin-left:18px}.detail-reference-chart{position:relative;min-width:0;min-height:0;display:flex;align-items:center;justify-content:center}.detail-reference-donut{width:170px;height:170px;border-radius:50%;display:grid;place-items:center;position:relative}.detail-reference-donut:after{content:"";position:absolute;width:88px;height:88px;border-radius:50%;background:#fff}.detail-reference-donut>div{z-index:1;text-align:center}.detail-reference-donut strong{font-size:17px;color:var(--ink)}.detail-reference-label{position:absolute;display:flex;flex-direction:column;color:var(--detail-label-color);font-size:10px;line-height:1.05;white-space:nowrap}.detail-reference-label b{font-size:12px}.detail-reference-label small{display:block;font-size:10px}.detail-reference-label:after{content:"";position:absolute;top:50%;width:34px;border-top:2px solid var(--detail-label-color)}.detail-reference-label-0{left:0;top:28%;text-align:right;align-items:flex-end}.detail-reference-label-0:after{left:100%;margin-left:5px}.detail-reference-label-1{right:0;top:34%;text-align:left;align-items:flex-start}.detail-reference-label-1:after{right:100%;margin-right:5px}.detail-reference-label-2{right:0;bottom:20%;text-align:left;align-items:flex-start}.detail-reference-label-2:after{right:100%;margin-right:5px}.detail-reference-legend{grid-column:2;display:flex;justify-content:center;align-items:center;gap:10px;min-width:0;overflow:hidden;color:var(--muted);font-size:10px}.detail-reference-legend span{display:inline-flex;align-items:center;gap:3px;white-space:nowrap}.detail-reference-legend i{width:7px;height:7px;border-radius:50%}
+  </style>
+  <style>
+    /* Harness: remove the detail legend and reclaim its reserved grid row on overview only. */
+    main[data-screen="overview"] #donutDetail .detail-reference-layout{grid-template-rows:minmax(0,1fr);}
+    main[data-screen="overview"] #donutDetail .detail-reference-legend{display:none!important}
+  </style>
+  <style>
+    /* Harness: enlarge only the overview detail chart's external category labels. */
+    main[data-screen="overview"] #donutDetail .detail-reference-label{font-size:12px}
+  </style>
+  <style>
+    /* Harness/MVP: halve the two overview auxiliary dropdowns while preserving the result text at the right. */
+    main[data-screen="overview"] #categories .sheet-block-secondary .sheet-filter-line select{flex:0 0 120px;width:120px}
+    main[data-screen="overview"] #categories .sheet-block-secondary .sheet-filter-line{position:relative}
+    main[data-screen="overview"] #categories .sheet-block-secondary .raw-data-filter-result{position:static;left:auto;margin:0}
+    main[data-screen="overview"] #categories .sheet-block-secondary .raw-data-table tbody tr[data-raw-secondary-row]{cursor:pointer}
+    main[data-screen="overview"] #categories .sheet-block-secondary .raw-data-table tbody tr.raw-secondary-row-selected{background:#dce8ff}
+main[data-screen="overview"] #categories .sheet-block-secondary .raw-secondary-selection-total{position:absolute;left:calc(600% / 7);top:4px;display:flex;justify-content:flex-start;align-items:center;gap:6px;height:100%;min-height:0;margin:0;padding:0 6px;color:#56627b;font-size:12px}
+main[data-screen="overview"] #categories .sheet-block-secondary .raw-secondary-sum-divider{display:inline-flex;flex:0 0 8px;width:8px;height:auto;margin:0;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;line-height:1;border:0}
+    main[data-screen="overview"] #categories .sheet-block-secondary .raw-secondary-selection-total b{color:var(--ink);font-size:14px}
+  </style>
+  <style>
+    /* Harness: place detail labels close to the donut while keeping a visible gap at both ends. */
+    main[data-screen="overview"] #donutDetail .detail-reference-label-0{left:calc(50% - 190px)}
+    main[data-screen="overview"] #donutDetail .detail-reference-label-1,main[data-screen="overview"] #donutDetail .detail-reference-label-2{right:calc(50% - 190px)}
+    main[data-screen="overview"] #donutDetail .detail-reference-label:after{width:24px;margin-left:4px;margin-right:4px}
+  </style>
+  <style>
+    /* Harness: normalize every 구분_1 filter button to the first button's full width. */
+    main[data-screen="overview"] #donutDetail .detail-reference-filters{position:relative;z-index:30;pointer-events:auto}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-columns,main[data-screen="overview"] #donutDetail .detail-reference-filter-section,main[data-screen="overview"] #donutDetail .detail-reference-filter-grid{position:relative;z-index:31}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-grid button{width:100%;margin-left:0!important;position:relative;z-index:32;pointer-events:auto;touch-action:manipulation}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart{position:relative;z-index:1;pointer-events:none}
+  </style>
+  <style>
+    /* Harness: halve only the 구분_2 월별 filter column on the overview screen. */
+    main[data-screen="overview"] #donutDetail .detail-reference-layout{grid-template-columns:190px minmax(0,1fr)}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-columns{display:grid;grid-template-columns:1fr 1fr;gap:6px;height:100%;min-width:0}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-section{min-width:0}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-head{grid-template-columns:1fr;font-size:10px}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-grid{gap:5px}
+    main[data-screen="overview"] #donutDetail .detail-reference-filter-grid button{margin-left:0!important;padding-left:3px;padding-right:3px}
+    main[data-screen="overview"] #donutDetail .detail-reference-category-grid{display:flex;flex-direction:column;gap:5px;padding-top:7px}
+    main[data-screen="overview"] #donutDetail .detail-reference-category-pill{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;border:1px solid var(--detail-label-color);border-radius:999px;padding:4px 3px;color:var(--detail-label-color);text-align:center;font-size:10px;font-weight:800}
+  </style>
+  <style>
+    /* Harness: shrink 구분_1 월별 by another 20px and expand 구분_2 월별 by another 20px. */
+    /* Harness: give 구분_1 월별 120% of its previous row and reclaim the same height from 구분_2. */
+    main[data-screen="overview"]>.layout{grid-template-rows:minmax(0,calc(60% - 48px)) minmax(0,calc(40% + 48px))}
+    /* MVP: expand only the requested 구분_2 월별 card horizontally. */
+    main[data-screen="overview"] #donutDetail{width:calc(200% * 1.06 / .7)}
+    main[data-screen="overview"] #donutDetail .detail-reference-donut{width:224px;height:224px}
+  </style>
+  <style>
+    /* Harness: scope the reference donut treatment to the overview main expense card only. */
+    main[data-screen="overview"] #donut .overview-expense-reference{position:relative;display:flex;align-items:center;justify-content:center;height:100%;min-height:0;overflow:visible}
+    main[data-screen="overview"] #donut .overview-expense-label:after{content:"";position:absolute;border-top:2px solid var(--label-color);width:42px;top:50%;opacity:.8}
+    main[data-screen="overview"] #donut>h3 .small{display:none!important}
+    main[data-screen="overview"] #donut .overview-expense-svg{width:720px;height:330px;max-width:100%;overflow:visible;display:block;transform:scale(1.2)}
+    main[data-screen="overview"] .overview-expense-slice{stroke:#fff;stroke-width:1px;stroke-linejoin:round}
+    main[data-screen="overview"] #donut .overview-expense-slice-label{font-size:12px;font-weight:800;fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px;dominant-baseline:middle}
+    main[data-screen="overview"] #donut .overview-expense-slice-label tspan:last-child{font-size:11px}
+    main[data-screen="overview"] #donutDetail .overview-expense-svg{width:720px;height:330px;max-width:100%;overflow:visible;display:block;transform:scale(1.12)}
+    main[data-screen="overview"] #donutDetail .overview-expense-slice-label{font-size:12px;font-weight:800;fill:#fff;paint-order:stroke;stroke:rgba(0,0,0,.35);stroke-width:2px;dominant-baseline:middle}
+    main[data-screen="overview"] #donutDetail .overview-expense-slice-label tspan:last-child{font-size:11px}
+    main[data-screen="overview"] #donut .overview-expense-connector{fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    main[data-screen="overview"] .overview-expense-category{font-size:12px;font-weight:800;paint-order:stroke;stroke:#fff;stroke-width:3px}
+    main[data-screen="overview"] #donut .overview-expense-total{font-size:16px;font-weight:800;fill:#1f2a44}
+    main[data-screen="overview"] #donut .overview-expense-label span{font-weight:700}
+    main[data-screen="overview"] #donut .overview-expense-value,main[data-screen="overview"] #donutDetail .detail-reference-value{position:absolute;z-index:2;display:flex;align-items:center;justify-content:center;color:#fff;text-align:center;text-shadow:0 1px 2px rgba(0,0,0,.35);pointer-events:none}
+    main[data-screen="overview"] #donut .overview-expense-value b,main[data-screen="overview"] #donutDetail .detail-reference-value b{display:flex;flex-direction:column;font-size:12px;line-height:1.05}
+    main[data-screen="overview"] #donut .overview-expense-value small,main[data-screen="overview"] #donutDetail .detail-reference-value small{font-size:11px}
+    main[data-screen="overview"] #donut .overview-expense-label-0{left:auto;right:calc(50% - 320px);top:50%;transform:translateY(-50%);align-items:flex-start;text-align:left}
+    main[data-screen="overview"] #donut .overview-expense-label-0:after{right:100%;left:auto;margin-right:4px}
+    main[data-screen="overview"] #donut .overview-expense-label-1{left:calc(50% - 320px);top:auto;bottom:22%;align-items:flex-end;text-align:right}
+    main[data-screen="overview"] #donut .overview-expense-label-2{left:calc(50% - 270px);right:auto;top:22%;align-items:flex-start;text-align:left}
+    main[data-screen="overview"] #donut .overview-expense-value-0{right:calc(50% - 130px);top:50%;transform:translateY(-50%)}
+    main[data-screen="overview"] #donut .overview-expense-value-1{left:calc(50% - 125px);bottom:28%}
+    main[data-screen="overview"] #donut .overview-expense-value-2{left:calc(50% - 120px);top:28%}
+    main[data-screen="overview"] #donutDetail .detail-reference-value-0{right:calc(50% - 80px);top:43%;transform:translateY(-50%)}
+    main[data-screen="overview"] #donutDetail .detail-reference-value-1{left:calc(50% - 82px);top:61%;transform:translateY(-50%)}
+    main[data-screen="overview"] #donutDetail .detail-reference-value-2{left:calc(50% - 82px);top:24%;transform:translateY(-50%)}
+    main[data-screen="overview"] #donut .overview-expense-donut{width:247px;height:247px}
+    main[data-screen="overview"] #donut .overview-expense-donut:after{width:133px;height:133px}
+    main[data-screen="overview"] #donut>h3{font-size:0}
+    main[data-screen="overview"] #donut>h3:before{content:"구분_1 월별";font-size:14px}
+  </style>
+  <style>
+    /* Harness: enlarge only the two overview monthly donut chart text systems by 2px. */
+    main[data-screen="overview"] #donut>h3:before{font-size:16px}
+    main[data-screen="overview"] #donutDetail>h3{font-size:16px!important}
+    main[data-screen="overview"] #donut .overview-expense-slice-label,main[data-screen="overview"] #donutDetail .overview-expense-slice-label{font-size:14px}
+    main[data-screen="overview"] #donut .overview-expense-slice-label tspan:last-child,main[data-screen="overview"] #donutDetail .overview-expense-slice-label tspan:last-child{font-size:13px}
+    main[data-screen="overview"] #donut .overview-expense-category,main[data-screen="overview"] #donutDetail .overview-expense-category{font-size:14px}
+    main[data-screen="overview"] #donut .overview-expense-total,main[data-screen="overview"] #donutDetail .overview-expense-total{font-size:18px}main[data-screen="overview"] .overview-expense-total-count{font-size:12px;font-weight:800}
+    main[data-screen="overview"] #donutDetail .overview-expense-total{font-weight:800}
+    /* Harness: render all five 구분_1 owner charts in one compact row. */
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;height:calc(100% - 28px);min-height:0;overflow:hidden}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card{min-width:0;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card h4{margin:0 0 2px;color:var(--detail-card-color);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-svg{width:100%;height:auto;max-width:100%;transform:scale(.9)}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-detail-header{font-size:10px;font-weight:800;paint-order:stroke;stroke:#fff;stroke-width:2px}
+    /* MVP: enlarge only the five 구분_2 월별 detail-donut text systems to 12px; donut geometry stays unchanged. */
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card h4{font-size:10px}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-slice-label{font-size:12px}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-slice-label tspan:last-child{font-size:12px}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-category{font-size:12px}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-total{font-size:14px}
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card .overview-expense-total-count{font-size:10px}
+  </style>
+  <style>
+    /* Harness/MVP: place each monthly row label above its eight donut charts. */
+    main[data-screen="monthly-donuts"] .monthly-donut-grid{grid-template-columns:repeat(12,minmax(74px,1fr));grid-template-rows:repeat(3,1fr)}
+    main[data-screen="monthly-donuts"] .monthly-donut-row{display:grid;grid-template-columns:repeat(12,minmax(74px,1fr));grid-column:1/-1;min-width:0;min-height:0}
+    main[data-screen="monthly-donuts"] .monthly-donut-label{grid-column:1/-1;align-self:flex-start;justify-self:start;padding:0 4px}
+  </style>
+  <style>
+    /* Harness/MVP: allow only overview donut cards to show labels beyond the card boundary. */
+    main[data-screen="overview"] #donut,
+    main[data-screen="overview"] #donutDetail,
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-grid,
+    main[data-screen="overview"] #donutDetail .detail-reference-chart-card{overflow:visible}
+  </style>
+  <!-- standalone-source: a21 dashboard-template with local JS modules inlined -->
+</head>
+<body>
+  <div class="dashboard-viewport" id="dashboardViewport">
+  <div class="shell" id="dashboardApp">
+    <aside class="sidebar"><div class="brand"><span class="brand-mark">▥</span>1. 구글 가계부</div><nav class="menu"><div class="menu-label">가계부</div><button class="nav-item active" data-view="overview" data-screen-link="overview"><span class="nav-icon">▦</span>요약 보기</button><button class="nav-item" data-view="core" data-screen-link="core"><span class="nav-icon">↗</span>핵심 요약</button><button class="nav-item" data-view="monthly-donuts" data-screen-link="monthly-donuts"><span class="nav-icon">◔</span>월별 차트</button><button class="nav-item" data-view="raw-data" data-screen-link="raw-data"><span class="nav-icon">▤</span>RAW DATA</button></nav><button class="chat">챗봇</button></aside>
+    <main class="main" id="overview" data-screen="overview">
+      <header class="topline"><div class="topline-controls"><div class="period"><span class="period-title">기간</span><button class="year" data-year="2025">25년</button><button class="year" data-year="2026">26년</button><span class="year-divider" aria-hidden="true"></span><button class="month" data-month="1">1월</button><button class="month" data-month="2">2월</button><button class="month" data-month="3">3월</button><button class="month" data-month="4">4월</button><button class="month" data-month="5">5월</button><button class="month" data-month="6">6월</button><button class="month" data-month="7">7월</button><button class="month" data-month="8">8월</button><button class="month" data-month="9">9월</button><button class="month" data-month="10">10월</button><button class="month" data-month="11" hidden>11월</button><button class="month" data-month="12" hidden>12월</button></div><div class="filters"><select id="ownerFilter" class="filter"><option>전체</option></select><select id="categoryFilter" class="filter"><option>전체</option></select></div></div><div class="actions"><span id="sourceStatus" class="status fallback">데이터 연결 대기 중</span><button id="syncButton" class="button">지금 동기화</button></div></header>
+      <section class="kpis"><div class="kpi"><div><div class="kpi-label">총 지출</div><div id="total" class="kpi-value">-</div></div><div class="kpi-note">선택 조건 기준</div></div><div class="kpi"><div><div class="kpi-label">거래 건수</div><div id="transactionCount" class="kpi-value">-</div></div><div class="kpi-note">현재 월 기준</div></div><div class="kpi"><div><div class="kpi-label">예산</div><div id="budget" class="kpi-value">-</div></div><div class="kpi-note">월별 계획 금액</div></div><div class="kpi"><div><div class="kpi-label">사용률</div><div id="rate" class="kpi-value">-</div></div><div class="kpi-note">지출 ÷ 예산</div></div></section>
+      <section class="layout"><div class="card" id="donut"><h3>대분류별 지출 <span class="small">단위: 원</span></h3><div class="progress-track"><i id="progress" style="width:0"></i></div><div class="progress-meta"><span id="progressText">-</span><span>예산 진행률</span></div><div class="overview-donut-layout"><div id="overviewDonut" class="overview-donut"><div class="overview-donut-center">총 지출<strong id="overviewDonutTotal">0원</strong></div></div><ul id="overviewDonutLegend" class="mini-legend"></ul></div></div><div class="card" id="categories"><h3>소분류별 지출 <span class="small">단위: 원</span></h3><div id="categoryBars"></div></div><div class="card" id="trend"><h3>대분류 월별</h3><div class="trend-wrap"><svg id="trendChart" class="trend-chart" viewBox="0 0 1000 360" preserveAspectRatio="none" aria-label="월별 지출 꺾은선 차트"></svg></div></div><div class="card" id="donutDetail"><h3>소분류 월별</h3><div class="detail-donut-layout"><div id="detailDonut" class="detail-donut"><div class="detail-donut-center">총 지출<strong id="detailDonutTotal">0원</strong></div></div><ul id="detailDonutLegend" class="detail-legend"></ul></div></div><div class="card" id="recentTransactions"><h3>선택 내역</h3><div class="table-wrap"><table class="table"><thead><tr><th>구성원</th><th>분류</th><th>상세 내역</th><th class="money">금액</th></tr></thead><tbody id="transactionsBody"></tbody></table></div></div></section>
+      <section class="card sheet-summary" id="sheetSummary">
+        <div class="sheet-summary-grid">
+          <div class="sheet-account-panel"><div id="accountRows" class="member-donuts"></div></div>
+          <div id="sheetDonuts" class="sheet-donuts"></div>
+        </div>
+      </section>
+  <section class="card core-summary-screen" id="coreSummary" hidden>
+        <div class="core-periodbar"><span>기간</span><button class="core-month" data-month="1">26년 1월</button><button class="core-month" data-month="2">26년 2월</button><button class="core-month" data-month="3">26년 3월</button><button class="core-month" data-month="4">26년 4월</button><button class="core-month" data-month="5">26년 5월</button><button class="core-month" data-month="6">26년 6월</button><button class="core-month" data-month="7">26년 7월</button><button class="core-month" data-month="8">26년 8월</button><button class="core-month" data-month="9">26년 9월</button><button class="core-month" data-month="10">26년 10월</button><button class="core-month" data-month="11">26년 11월</button><button class="core-month" data-month="12">26년 12월</button><select id="coreOwnerFilter" class="core-filter"><option>전체</option></select><select id="coreCategoryFilter" class="core-filter"><option>전체</option></select></div>
+        <div class="core-kpis"><div class="core-kpi"><small>추정 저축액 및 저축 비율</small><strong id="coreSavingKpi" class="green">-</strong><span id="coreSavingSub">-</span></div><div class="core-kpi"><small>수입</small><strong id="coreIncomeKpi" class="blue">-</strong><span>월별 예산 기준</span></div><div class="core-kpi"><small>지출</small><strong id="coreExpenseKpi" class="red">-</strong><span>월별 사용액</span></div><div class="core-kpi"><small>거래 건수</small><strong id="coreCountKpi" class="purple">-</strong><span>현재 월 기준</span></div></div>
+        <div class="core-main"><article class="core-chart-card"><div class="core-chart-title-row"><h3>월별 구성원별 지출 흐름</h3><div class="core-legend"><span><i class="core-dot living"></i>생활비</span><span><i class="core-dot couple"></i>부부</span><span><i class="core-dot outside"></i>부부외</span><span><i class="core-dot bomnae"></i>봄내</span><span><i class="core-dot business"></i>사업</span></div></div><div class="core-chart-wrap"><svg id="coreSummaryChart" class="core-summary-chart" viewBox="0 0 1200 680" preserveAspectRatio="none" aria-label="월별 구성원별 지출 꺾은선 차트"></svg></div></article><aside class="core-donut-stack"><article class="core-donut-card"><h3>수입 상세</h3><div id="coreIncomeDonut" class="core-donut-box"></div></article><article class="core-donut-card"><h3>지출 상세</h3><div id="coreExpenseDonut" class="core-donut-box"></div></article></aside></div>
+      </section>
+  <section class="card monthly-donut-screen" id="monthlyDonutScreen" hidden>
+    <div class="monthly-donut-period"><span>기간</span><button class="year" data-year="2025">25년</button><button class="year" data-year="2026">26년</button><span class="year-divider" aria-hidden="true"></span></div>
+    <div class="monthly-donut-grid" id="monthlyDonutGrid"></div>
+  </section>
+  <section class="card raw-data-screen" id="rawDataScreen" hidden>
+    <div class="raw-data-head"><div><h2>RAW DATA</h2><p id="rawDataDescription">동기화된 Google Sheets 원본 데이터와 요약 블록을 표시합니다.</p></div><span id="rawDataStatus" class="raw-data-status">Google Sheets 자동 연동</span></div>
+    <div class="raw-data-period" id="rawDataPeriod"><span>기간</span><button data-raw-year="2025">25년</button><button data-raw-year="2026">26년</button><i class="divider" aria-hidden="true"></i><button data-raw-month="1">1월</button><button data-raw-month="2">2월</button><button data-raw-month="3">3월</button><button data-raw-month="4">4월</button><button data-raw-month="5">5월</button><button data-raw-month="6">6월</button><button data-raw-month="7">7월</button><button data-raw-month="8">8월</button><button data-raw-month="9">9월</button><button data-raw-month="10">10월</button><button data-raw-month="11">11월</button><button data-raw-month="12">12월</button></div>
+    <div class="sheet-canvas"><div class="raw-data-grid" id="rawDataGrid"></div></div>
+    <div class="raw-data-pager" id="rawDataPager"></div>
+  </section>
+    </main>
+  </div>
+  </div>
+<script type="module">
+const MONTHLY_ITEMS = [
+  { label: '외식비+장보기', color: '#405DE6', budget: 1000000, matches: ['외식비', '장보기'] },
+  { label: '지혜용돈', color: '#E1306C', budget: 300000, matches: ['지혜'] },
+  { label: '성현용돈', color: '#0A7142', budget: 300000, matches: ['성현'] },
+];
+
+function getMonthlyDonutRawRows(transactions = [], month, label) {
+  const item = MONTHLY_ITEMS.find((candidate) => candidate.label === label);
+  if (!item) return [];
+  return transactions.filter((row) => Number(row.month) === Number(month) && item.matches.some((keyword) => String(row.category || '').includes(keyword)));
+}
+
+function buildMonthlyDonutModel(transactions = [], months = 12) {
+  const labels = Array.from({ length: months }, (_, index) => `${index + 1}월`);
+  const rows = MONTHLY_ITEMS.map((item) => ({
+    label: item.label,
+    color: item.color,
+    budget: item.budget,
+    values: labels.map((_, index) => {
+      const rowsForMonth = getMonthlyDonutRawRows(transactions, index + 1, item.label);
+      const budget = item.budget;
+      const amount = rowsForMonth.reduce((sum, row) => sum + (Number(row.amount) || 0), 0);
+      return { budget, amount, count: rowsForMonth.length, rate: budget ? (1 - amount / budget) * 100 : 0 };
+    }),
+  }));
+  return { labels, rows };
+}
+
+
+const aliases = {
+  owner: ['구분_1', '구분', 'owner'],
+  category: ['구분_2', 'category'],
+  card: ['카드', 'card'],
+  detail: ['상세 내역', '상세내역', 'detail'],
+  amount: ['금액', 'amount', '사용액'],
+  budget: ['예산', 'budget'],
+  day: ['일', 'day'],
+};
+
+function clean(value) {
+  return String(value ?? '').trim();
+}
+
+function number(value) {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const parsed = Number(clean(value).replace(/[₩원,%\s,]/g, ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function headerIndex(headers, keys) {
+  return keys.map((key) => headers.indexOf(key)).find((index) => index >= 0) ?? -1;
+}
+
+function normalizeRows(rows = []) {
+  if (!Array.isArray(rows) || rows.length < 2) return [];
+  const headerRow = rows.findIndex((row) => row.some((value) => aliases.category.includes(clean(value)) || aliases.amount.includes(clean(value))));
+  if (headerRow < 0) return [];
+  const headers = rows[headerRow].map(clean);
+  const indexes = Object.fromEntries(Object.entries(aliases).map(([name, keys]) => [name, headerIndex(headers, keys)]));
+  if (indexes.amount < 0 || indexes.amount <= indexes.detail || indexes.amount > indexes.detail + 2) indexes.amount = indexes.detail + 1;
+  if (indexes.day < 0) indexes.day = 3;
+  if (indexes.budget < 0) indexes.budget = 14;
+  return rows.slice(headerRow + 1).map((row) => ({
+    owner: clean(row[indexes.owner]),
+    category: clean(row[indexes.category]) || '미분류',
+    card: clean(row[indexes.card]) || '미지정',
+    detail: clean(row[indexes.detail]),
+    amount: number(row[indexes.amount]),
+    budget: number(row[indexes.budget]),
+    day: number(row[indexes.day]),
+  })).filter((row) => row.amount !== 0 || row.detail || row.category !== '미분류');
+}
+
+function summarizeLedger(transactions = []) {
+  const total = transactions.reduce((sum, row) => sum + row.amount, 0);
+  const budget = transactions.reduce((sum, row) => sum + row.budget, 0);
+  const categories = [...transactions.reduce((map, row) => {
+    const current = map.get(row.category) || { name: row.category, amount: 0 };
+    current.amount += row.amount;
+    map.set(row.category, current);
+    return map;
+  }, new Map()).values()].sort((a, b) => b.amount - a.amount);
+  return { total, budget, balance: budget - total, rate: budget ? Math.round((total / budget) * 10000) / 100 : 0, categories };
+}
+
+function filterTransactions(transactions, { owner = '전체', category = '전체' } = {}) {
+  return transactions.filter((row) => (owner === '전체' || row.owner === owner) && (category === '전체' || row.category === category));
+}
+
+function parseGvizResponse(text) {
+  const json = text.replace(/^.*?setResponse\(/s, '').replace(/\);?\s*$/, '');
+  const payload = JSON.parse(json);
+  const labels = payload.table.cols.map((col) => col.label || '');
+  const rows = payload.table.rows.map((row) => row.c.map((cell) => cell?.v ?? ''));
+  if (labels.some(Boolean)) return [labels, ...rows];
+  return rows;
+}
+
+function formatWon(value) {
+  return `${Math.round(value).toLocaleString('ko-KR')}원`;
+}
+
+
+function buildCategoryChartModel(transactions = []) {
+  const map = transactions.reduce((result, row) => {
+    const key = row.category || '미분류';
+    const amount = Number(row.amount) || 0;
+    const current = result.get(key) || { amount: 0, count: 0 };
+    result.set(key, { amount: current.amount + amount, count: current.count + (amount !== 0 ? 1 : 0) });
+    return result;
+  }, new Map());
+  const count = [...map.values()].reduce((sum, value) => sum + value.count, 0);
+  const items = [...map.entries()].filter(([, value]) => value.amount !== 0).sort((a, b) => b[1].amount - a[1].amount).map(([name, value]) => ({ name, value: value.amount, count: value.count, percent: 0 }));
+  const total = items.reduce((sum, item) => sum + item.value, 0);
+  items.forEach((item) => { item.percent = total ? Math.round((item.value / total) * 10000) / 100 : 0; });
+  return { labels: items.map((item) => item.name), values: items.map((item) => item.value), total, count, items };
+}
+
+// A donut slice cannot represent a negative angle. Keep the model's net total
+// intact, but provide safe, positive-only values for SVG geometry and labels.
+function buildDonutRenderItems(model, items = model?.items ?? []) {
+  const positiveItems = items.filter((item) => Number(item.value) > 0);
+  const positiveTotal = positiveItems.reduce((sum, item) => sum + Number(item.value), 0);
+  return positiveItems.map((item) => ({
+    ...item,
+    percent: positiveTotal ? Math.round((Number(item.value) / positiveTotal) * 10000) / 100 : 0,
+  }));
+}
+
+function buildMonthlyChartModel(transactions = [], year = 2026) {
+  const observed = [...new Set(transactions.map((row) => Number(row.month)).filter((month) => month >= 1 && month <= 12))].sort((a, b) => a - b);
+  const months = observed.length ? Array.from({ length: observed.at(-1) - observed[0] + 1 }, (_, index) => observed[0] + index) : [];
+  const map = transactions.reduce((result, row) => { const month = Number(row.month); result.set(month, (result.get(month) || 0) + (Number(row.amount) || 0)); return result; }, new Map());
+  return { year, labels: months.map((month) => `${month}월`), values: months.map((month) => map.get(month) || 0) };
+}
+
+
+function sumBy(transactions, key) {
+  return transactions.reduce((sum, row) => sum + (Number(row[key]) || 0), 0);
+}
+
+function buildCoreSummaryModel(monthlyTransactions = [], year = 2026) {
+  const source = new Map(monthlyTransactions.map((item) => [item.month, item]));
+  const months = [...source.keys()].sort((a, b) => a - b);
+  const rows = months.length ? Array.from({ length: months[months.length - 1] - months[0] + 1 }, (_, index) => source.get(months[0] + index) || { month: months[0] + index, transactions: [] }) : [];
+  const income = rows.map((item) => sumBy(item.transactions || [], 'budget'));
+  const expense = rows.map((item) => sumBy(item.transactions || [], 'amount'));
+  const saving = income.map((value, index) => value - expense[index]);
+  return {
+    year,
+    labels: rows.map((item) => String(item.month) + '월'),
+    income,
+    expense,
+    saving,
+    savingRate: income.map((value, index) => value ? Math.round((saving[index] / value) * 1000) / 10 : 0),
+  };
+}
+
+const CORE_OWNER_GROUPS = [
+  { label: '생활비', prefix: '생활비' },
+  { label: '부부', prefix: '부부_' },
+  { label: '부부외', prefix: '부부외_' },
+  { label: '봄내', prefix: '봄내_' },
+  { label: '사업', prefix: '사업_' },
+];
+
+function buildCoreOwnerSummaryModel(transactions = []) {
+  const rows = CORE_OWNER_GROUPS.map(({ label, prefix }) => {
+    const group = transactions.filter((row) => String(row.owner || '').startsWith(prefix));
+    const income = sumBy(group, 'budget');
+    const expense = sumBy(group, 'amount');
+    return { label, income, expense, saving: income - expense };
+  });
+  return { labels: rows.map((row) => row.label), income: rows.map((row) => row.income), expense: rows.map((row) => row.expense), saving: rows.map((row) => row.saving) };
+}
+
+const CORE_OWNER_LINE_GROUPS = [
+  { label: '생활비', prefix: '생활비', color: '#405DE6' },
+  { label: '부부', prefix: '부부_', color: '#833AB4' },
+  { label: '부부외', prefix: '부부외_', color: '#E1306C' },
+  { label: '봄내', prefix: '봄내_', color: '#FD1D1D' },
+  { label: '사업', prefix: '사업_', color: '#F77737' },
+];
+
+function buildCoreOwnerTrendModel(transactions = [], year = 2026) {
+  const months = [...new Set(transactions.map((row) => Number(row.month)).filter((month) => month >= 1 && month <= 12))].sort((a, b) => a - b);
+  const labels = months.map((month) => `${month}월`);
+  const series = CORE_OWNER_LINE_GROUPS.map(({ label, prefix, color }) => ({
+    label,
+    color,
+    values: months.map((month) => transactions.filter((row) => Number(row.month) === month && String(row.owner || '').startsWith(prefix)).reduce((sum, row) => sum + (Number(row.amount) || 0), 0)),
+  }));
+  return { year, labels, series };
+}
+
+
+
+const config = {
+  spreadsheetId: '1-XhzxWxJVT8icRHcVEaY_hNfzxGhbgaBCsA3KT9n6qw',
+  defaultYear: 2026,
+  defaultMonth: 10,
+  refreshMs: 5 * 60 * 1000,
+};
+
+const sampleRows = [
+  ['구분_1', '구분_2', '카드', '상세 내역', '금액', '예산'],
+  ['생활비_11', '1-0. 외식비', '채움스마트_지혜', 'sck컴퍼니', 2000, 300000],
+  ['생활비_11', '1-1. 장보기', '채움스마트_지혜', '쿠팡', 6000, 700000],
+  ['생활비_11', '2-1. 지혜 용돈', '채움스마트_지혜', '춘천동부교회', 10000, 300000],
+  ['부부_12', '2-2. 성현 용돈', '하나SK', '쿠팡', 28000, 300000],
+  ['부부외_13', '2-2. 성현 용돈', '채움스마트_지혜', '쿠팡', 50000, 300000],
+  ['봄내_14', '1-1. 관리사님 비용', '하나SK', '수도요금', 48000, 200000],
+  ['사업_15', '2-1. 운영비', '국민카드', '서비스 비용', 90000, 400000],
+];
+
+const state = { year: config.defaultYear, month: config.defaultMonth, owner: '전체', category: '전체', transactions: [], trendTransactions: [], sheetSummary: null, coreSummary: null, source: '샘플 데이터', lastUpdated: null };
+const RAW_DATA_PAGE_SIZE = 28;
+let rawDataPageIndex = 1;
+const RAW_SECONDARY_PAGE_SIZE = 12;
+let rawSecondaryPageIndex = 1;
+const rawSecondaryFilter = { owner: '생활비_11', category: '2-2. 성현 용돈' };
+let rawSecondarySelectedRows = new Set();
+const $ = (selector) => document.querySelector(selector);
+function monthCount(year) { return year === 2025 ? 12 : 10; }
+function sheetName(year, month) {
+  if (year === 2025) return month === 1 ? '지출_25년1월_성현' : `지출_25년${month}월`;
+  return `☘️지출_26년${month}월`;
+}
+
+function toNumber(value) {
+  const parsed = Number(String(value ?? '').replace(/[₩원,%\s,]/g, ''));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function extractCategoryOrderByOwner(cells) {
+  const order = [];
+  cells.forEach((row) => {
+    const category = String(row[13] ?? '').trim();
+    if (/^\d+-/.test(category) && !order.includes(category)) order.push(category);
+  });
+  return { all: order };
+}
+
+function mergeCategoryOrderByOwner(summaries) {
+  const merged = { all: [] };
+  summaries.forEach((summary) => {
+    (summary?.categoryOrderByOwner?.all || []).forEach((category) => { if (!merged.all.includes(category)) merged.all.push(category); });
+  });
+  return merged;
+}
+
+function parseSheetSummary(rows) {
+  const cells = rows.map((row) => Array.from({ length: 19 }, (_, index) => row[index] ?? ''));
+  const categoryOrderByOwner = extractCategoryOrderByOwner(cells);
+  const accountRows = [];
+  for (let index = 2; index < Math.min(20, cells.length); index += 1) {
+    const name = String(cells[index][0]).trim();
+    if (!/^[^★\s].*_\d+$/.test(name)) continue;
+    const next = cells[index + 1] || [];
+    const hasBudget = String(next[0]).trim() !== '' && toNumber(next[0]) !== 0;
+    accountRows.push({ name, budget: hasBudget ? toNumber(next[0]) : 0, used: hasBudget ? toNumber(next[1]) : toNumber(cells[index][1]), rate: hasBudget ? toNumber((cells[index + 2] || [])[1]) * 100 : 0 });
+  }
+  const donutLabels = [
+    { name: '외식비+장보기', source: '외식비', categories: ['1-0. 외식비', '1-1. 장보기'], budget: 1000000, color: '#405DE6' },
+    { name: '지혜 용돈', source: '지혜용돈', categories: ['2-1. 지혜 용돈'], budget: 300000, color: '#E1306C' },
+    { name: '성현 용돈', source: '성현용돈', categories: ['2-2. 성현 용돈'], budget: 300000, color: '#0A7142' },
+  ];
+  const donuts = donutLabels.map((item) => {
+    const start = cells.findIndex((row) => String(row[0]).trim() === item.source);
+    let rate = 0;
+    for (let index = start + 1; index < Math.min(start + 7, cells.length); index += 1) {
+      if (String(cells[index][1]).trim() !== '') { rate = toNumber(cells[index][1]) * 100; break; }
+    }
+    return { name: item.name, categories: item.categories, budget: item.budget, rate, color: item.color };
+  });
+  return { fundsTotal: toNumber((cells[2] || [])[1]), totalBudget: toNumber((cells[3] || [])[0]), totalUsed: toNumber((cells[3] || [])[1]), remainingRate: toNumber((cells[4] || [])[1]) * 100, accounts: accountRows, donuts, categoryOrderByOwner };
+}
+
+let gvizFallbackQueue = Promise.resolve();
+function loadGvizText(url) {
+  if (typeof window.fetch === 'function' && window.location.protocol !== 'file:') {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
+    return window.fetch(url, { cache: 'no-store', signal: controller.signal }).then((response) => { if (!response.ok) throw new Error(`Google Sheets 응답 ${response.status}`); return response.text(); }).finally(() => clearTimeout(timeout));
+  }
+  const request = () => new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    let settled = false;
+    const timer = setTimeout(() => finish(new Error('Google Sheets 응답 시간 초과')), 15000);
+    const cleanup = () => { clearTimeout(timer); script.remove(); window.google.visualization.Query.setResponse = null; };
+    const finish = (error, payload) => { if (settled) return; settled = true; cleanup(); if (error) reject(error); else resolve(`google.visualization.Query.setResponse(${JSON.stringify(payload)});`); };
+    window.google = window.google || {};
+    window.google.visualization = window.google.visualization || {};
+    window.google.visualization.Query = window.google.visualization.Query || {};
+    window.google.visualization.Query.setResponse = (payload) => finish(null, payload);
+    script.src = url;
+    script.async = true;
+    script.onerror = () => finish(new Error('Google Sheets 응답을 불러오지 못했습니다.'));
+    document.head.appendChild(script);
+  });
+  const result = gvizFallbackQueue.then(request, request);
+  gvizFallbackQueue = result.then(() => undefined, () => undefined);
+  return result;
+}
+
+async function fetchMonth(year, month) {
+  const url = `https://docs.google.com/spreadsheets/d/${config.spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName(year, month))}`;
+  const rawText = await loadGvizText(url);
+  const rows = parseGvizResponse(rawText);
+  return { transactions: normalizeRows(rows), sheetSummary: parseSheetSummary(rows) };
+}
+
+const HISTORICAL_SNAPSHOT_DATE = '2026-08-31';
+function isFrozenMonth(year, month) { return year === 2025 || (year === 2026 && month <= 8); }
+function historicalStorageKey(year, month) { return `gajebu-historical-${HISTORICAL_SNAPSHOT_DATE}-${year}-${month}`; }
+function readHistoricalMonth(year, month) {
+  try {
+    const raw = localStorage.getItem(historicalStorageKey(year, month));
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) { console.warn('고정 스냅샷을 읽지 못했습니다.', error); return null; }
+}
+function writeHistoricalMonth(year, month, payload) {
+  try { localStorage.setItem(historicalStorageKey(year, month), JSON.stringify(payload)); } catch (error) { console.warn('고정 스냅샷을 저장하지 못했습니다.', error); }
+  return payload;
+}
+async function fetchHistoricalMonth(year, month) {
+  return readHistoricalMonth(year, month) || writeHistoricalMonth(year, month, await fetchMonth(year, month));
+}
+async function fetchSynchronizedMonths(year) {
+  const months = Array.from({ length: monthCount(year) }, (_, index) => index + 1);
+  if (year === 2026) {
+    const historical = await Promise.all(months.filter((month) => isFrozenMonth(year, month)).map((month) => fetchHistoricalMonth(year, month)));
+    const live = await Promise.all(months.filter((month) => !isFrozenMonth(year, month)).map((month) => fetchMonth(year, month)));
+    return [...historical, ...live];
+  }
+  return Promise.all(months.map((month) => fetchHistoricalMonth(year, month)));
+}
+
+function activeTransactions() { return filterTransactions(state.transactions, { owner: state.owner, category: state.category }); }
+
+function formatCompactWon(value) {
+  const numeric = Number(value) || 0;
+  const sign = numeric < 0 ? '-' : '';
+  return `${sign}${Math.round(Math.abs(numeric) / 10000).toLocaleString('ko-KR')}만원`;
+}
+
+function polarPoint(cx, cy, radius, angleDeg) {
+  const radians = (angleDeg - 90) * Math.PI / 180;
+  return { x: cx + Math.cos(radians) * radius, y: cy + Math.sin(radians) * radius };
+}
+
+function donutArcPath(cx, cy, outerRadius, innerRadius, startAngle, endAngle) {
+  if (endAngle - startAngle >= 359.99) {
+    const outerTop = (cy - outerRadius).toFixed(2); const outerBottom = (cy + outerRadius).toFixed(2);
+    const innerTop = (cy - innerRadius).toFixed(2); const innerBottom = (cy + innerRadius).toFixed(2);
+    return `M ${cx},${outerTop} A ${outerRadius} ${outerRadius} 0 1 0 ${cx},${outerBottom} A ${outerRadius} ${outerRadius} 0 1 0 ${cx},${outerTop} L ${cx},${innerTop} A ${innerRadius} ${innerRadius} 0 1 1 ${cx},${innerBottom} A ${innerRadius} ${innerRadius} 0 1 1 ${cx},${innerTop} Z`;
+  }
+  const outerStart = polarPoint(cx, cy, outerRadius, endAngle);
+  const outerEnd = polarPoint(cx, cy, outerRadius, startAngle);
+  const innerStart = polarPoint(cx, cy, innerRadius, startAngle);
+  const innerEnd = polarPoint(cx, cy, innerRadius, endAngle);
+  const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+  return `M ${outerStart.x.toFixed(2)} ${outerStart.y.toFixed(2)} A ${outerRadius} ${outerRadius} 0 ${largeArc} 0 ${outerEnd.x.toFixed(2)} ${outerEnd.y.toFixed(2)} L ${innerStart.x.toFixed(2)} ${innerStart.y.toFixed(2)} A ${innerRadius} ${innerRadius} 0 ${largeArc} 1 ${innerEnd.x.toFixed(2)} ${innerEnd.y.toFixed(2)} Z`;
+}
+
+function resolveLabelYs(desiredYs, minGap, minY, maxY) {
+  if (!desiredYs.length) return [];
+  const pairs = desiredYs.map((y, index) => ({ index, y: Math.max(minY, Math.min(maxY, y)) })).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < pairs.length; i += 1) pairs[i].y = Math.max(pairs[i].y, pairs[i - 1].y + minGap);
+  const overflow = pairs[pairs.length - 1].y - maxY;
+  if (overflow > 0) pairs.forEach((pair) => { pair.y -= overflow; });
+  const underflow = minY - pairs[0].y;
+  if (underflow > 0) pairs.forEach((pair) => { pair.y += underflow; });
+  const resolved = Array(desiredYs.length).fill(minY);
+  pairs.forEach((pair) => { resolved[pair.index] = Math.max(minY, Math.min(maxY, pair.y)); });
+  return resolved;
+}
+
+function resolveDonutLabelYs(points, minGap, minY, maxY) {
+  const desired = points.map((point) => point.y);
+  return resolveLabelYs(desired, minGap, minY, maxY);
+}
+
+// Shared contract for midpoint-based labels in both overview donut cards.
+const DONUT_LABEL_RULES = { radius: 84, minGap: 38, minY: 30, bottomInset: 38, connectorLength: 10, connectorGap: 4, labelClearance: 2 };
+
+function renderReferenceDonut(model, colors) {
+  return renderReferenceDonutWithOptions(model, colors, {});
+}
+
+function renderReferenceDonutWithOptions(model, colors, options = {}) {
+  const width = options.width ?? 720; const height = options.height ?? 330; const cx = options.cx ?? 360; const cy = options.cy ?? 153; const outerRadius = options.outerRadius ?? 112; const innerRadius = options.innerRadius ?? 64;
+  let items = buildDonutRenderItems(model, (options.items ?? model.items.slice(0, 6)));
+  if (!items.length && Number(model.total) !== 0) items = [{ name: '전체', value: Math.abs(Number(model.total)), count: model.count || 0, percent: 100 }];
+  const totalPercent = items.reduce((sum, item) => sum + item.percent, 0);
+  const totalCount = model.count ?? model.items.reduce((sum, item) => sum + item.count, 0);
+  let cursor = 0; let slices = ''; const candidates = []; const external = [];
+  items.forEach((item, index) => {
+    const sweepPercent = totalPercent ? (item.percent / totalPercent) * 100 : 0;
+    const startAngle = cursor * 3.6; const endAngle = (cursor + sweepPercent) * 3.6; cursor += sweepPercent;
+    const color = options.itemColors?.[item.name] ?? colors[index % colors.length];
+    if (totalPercent && item.percent > 0) {
+      const slicePath = `<path class="overview-expense-slice" fill="${color}" stroke="#fff" stroke-width="1" stroke-linejoin="round" d="${donutArcPath(cx, cy, outerRadius, innerRadius, startAngle, endAngle)}"/>`;
+      const hoverDetails = [formatCompactWon(item.value), `${item.percent.toFixed(1)}%`, `${item.count}건`];
+      slices += item.percent <= 5 ? `<g class="overview-expense-small-slice" tabindex="0" data-donut-tooltip-details="${escapeRawText(hoverDetails.join('|'))}" data-donut-tooltip-color="${color}">${slicePath}</g>` : slicePath;
+    }
+    const midAngle = startAngle + ((endAngle - startAngle) / 2); const sliceLabelRadius = (outerRadius + innerRadius) / 2; const point = polarPoint(cx, cy, sliceLabelRadius, midAngle);
+    candidates.push({ item, index, color, point, midAngle });
+  });
+  const availableLabelRadius = Math.max(0, Math.min(cx, width - cx, cy, height - cy) - 14);
+  const baseLabelRadius = outerRadius + DONUT_LABEL_RULES.connectorGap + DONUT_LABEL_RULES.labelClearance + DONUT_LABEL_RULES.connectorLength;
+  const labelScale = Math.min(1, availableLabelRadius / baseLabelRadius);
+  const externalLabelWidth = (candidate) => Math.max(42, candidate.item.name.length * (width < 400 ? 7 : 9) + 10);
+  const externalLabelHeight = width < 400 ? 16 : 20;
+  const hasEarlierOverlap = (candidate, index) => {
+    const candidatePoint = polarPoint(cx, cy, outerRadius + DONUT_LABEL_RULES.connectorGap + DONUT_LABEL_RULES.connectorLength + DONUT_LABEL_RULES.labelClearance, candidate.midAngle);
+    return candidates.slice(0, index).some((previous) => {
+      const previousPoint = polarPoint(cx, cy, outerRadius + DONUT_LABEL_RULES.connectorGap + DONUT_LABEL_RULES.connectorLength + DONUT_LABEL_RULES.labelClearance, previous.midAngle);
+      return (candidate.point.x >= cx) === (previous.point.x >= cx) && Math.abs(candidatePoint.x - previousPoint.x) < ((externalLabelWidth(candidate) + externalLabelWidth(previous)) / 2) && Math.abs(candidatePoint.y - previousPoint.y) < externalLabelHeight + DONUT_LABEL_RULES.labelClearance;
+    });
+  };
+  const externalLabels = candidates.map((candidate) => {
+    const side = candidate.point.x >= cx ? 'right' : 'left';
+    const direction = side === 'right' ? 1 : -1;
+    const labelWidth = Math.max(42, candidate.item.name.length * (width < 400 ? 7 : 9) + 10);
+    const angleRadians = (candidate.midAngle - 90) * Math.PI / 180;
+    const radialX = Math.abs(Math.cos(angleRadians)) > 0.001 ? Math.min((width - labelWidth / 2 - cx) / Math.abs(Math.cos(angleRadians)), (cx - labelWidth / 2) / Math.abs(Math.cos(angleRadians))) : Infinity;
+    const radialY = Math.abs(Math.sin(angleRadians)) > 0.001 ? Math.min((height - 10 - cy) / Math.abs(Math.sin(angleRadians)), (cy - 10) / Math.abs(Math.sin(angleRadians))) : Infinity;
+    const maxLabelRadius = Math.min(availableLabelRadius, Math.max(0, Math.min(radialX, radialY)));
+    const candidateScale = Math.min(labelScale, maxLabelRadius / baseLabelRadius);
+    const anchor = polarPoint(cx, cy, outerRadius + DONUT_LABEL_RULES.connectorGap, candidate.midAngle);
+    const isBehindOverlappingLabel = hasEarlierOverlap(candidate, candidate.index);
+    const connectorLength = isBehindOverlappingLabel ? 20 : DONUT_LABEL_RULES.connectorLength;
+    const connectorEnd = polarPoint(cx, cy, outerRadius + DONUT_LABEL_RULES.connectorGap + connectorLength, candidate.midAngle);
+    const labelBoxGap = DONUT_LABEL_RULES.labelClearance;
+    const connectorInset = Math.min(labelWidth / (2 * Math.max(Math.abs(Math.cos(angleRadians)), 0.001)), 10 / Math.max(Math.abs(Math.sin(angleRadians)), 0.001));
+    const labelPoint = polarPoint(cx, cy, outerRadius + DONUT_LABEL_RULES.connectorGap + connectorLength + labelBoxGap + connectorInset, candidate.midAngle);
+    return { candidate, direction, anchor, labelPoint, connectorEnd, side, connectorLength, isBehindOverlappingLabel };
+  });
+  const valueLabels = candidates.map((candidate, index) => {
+    const labelY = candidate.point.y;
+    const labelFill = '#fff';
+    const labelStroke = '#000';
+    const smallLabel = candidate.item.percent <= 5;
+    return `<text class="overview-expense-slice-label${smallLabel ? ' overview-expense-small-label' : ''}" x="${candidate.point.x.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="${labelFill}" stroke="${labelStroke}" style="fill:${labelFill};stroke:${labelStroke}${smallLabel ? ';display:none' : ''}"><tspan x="${candidate.point.x.toFixed(1)}" dy="-12">${formatCompactWon(candidate.item.value)}</tspan><tspan x="${candidate.point.x.toFixed(1)}" dy="12">${candidate.item.percent.toFixed(1)}%</tspan><tspan x="${candidate.point.x.toFixed(1)}" dy="12">${candidate.item.count}건</tspan></text>`;
+  }).join('');
+  const connectorLines = externalLabels.map(({ candidate, anchor, connectorEnd }) => `<line class="overview-expense-connector" x1="${anchor.x.toFixed(1)}" y1="${anchor.y.toFixed(1)}" x2="${connectorEnd.x.toFixed(1)}" y2="${connectorEnd.y.toFixed(1)}" fill="none" stroke="${candidate.color}" stroke-width="1.5"/>`).join('');
+  const externalCategoryLabelBackgrounds = externalLabels.map(({ candidate, labelPoint }) => {
+    const compact = width < 400;
+    const labelWidth = Math.max(42, candidate.item.name.length * (compact ? 7 : 9) + 10);
+    const labelHeight = compact ? 16 : 20;
+    return `<rect class="overview-expense-category-background" x="${(labelPoint.x - labelWidth / 2).toFixed(1)}" y="${(labelPoint.y - labelHeight / 2).toFixed(1)}" width="${labelWidth.toFixed(1)}" height="${labelHeight}" fill="#fff"/>`;
+  }).join('');
+  const externalCategoryLabels = externalLabels.map(({ candidate, labelPoint }) => `<text class="overview-expense-category" x="${labelPoint.x.toFixed(1)}" y="${labelPoint.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" fill="${candidate.color}">${candidate.item.name}</text>`).join('');
+  const detailHeader = options.headerText ? `<text class="overview-expense-detail-header" x="${cx}" y="${cy - 28}" text-anchor="middle" dominant-baseline="middle" fill="${options.headerColor ?? '#23304a'}">${escapeRawText(options.headerText)}</text>` : '';
+  return `<svg class="overview-expense-svg" viewBox="0 0 ${width} ${height}" role="img" aria-label="대분류별 지출 도넛 차트">${slices}<circle cx="${cx}" cy="${cy}" r="${innerRadius - 1}" fill="#fff"/>${connectorLines}${valueLabels}${externalCategoryLabelBackgrounds}${externalCategoryLabels}${detailHeader}<text class="overview-expense-total" x="${cx}" y="${cy - 5}" text-anchor="middle"><tspan x="${cx}" dy="0">${formatWon(model.total)}</tspan><tspan class="overview-expense-total-count" x="${cx}" dy="16">${totalCount}건</tspan></text></svg>`;
+}
+
+function renderInlineDonut(transactions, categoryOrderByOwner = {}) {
+  // The overview expense classification follows the sheet's 구분_1 column (normalized as owner).
+  const ownerOrder = ['생활비_11', '부부_12', '부부외_13', '봄내_14', '사업_15'];
+  const baseModel = buildCategoryChartModel(transactions.map((row) => ({ ...row, category: row.owner || '미분류' })));
+  const orderedNames = [...ownerOrder.filter((owner) => baseModel.items.some((item) => item.name === owner)), ...baseModel.items.map((item) => item.name).filter((name) => !ownerOrder.includes(name))];
+  const model = { ...baseModel, items: orderedNames.map((name) => baseModel.items.find((item) => item.name === name)) };
+  const colors = ['#405DE6', '#833AB4', '#E1306C', '#FD1D1D', '#F77737', '#FCB045'];
+  const overviewItemColors = {
+    '3-2. 주유비': '#7589EC',
+    '3-3. 월세': '#A670C8',
+    '4-0. 통신비': '#E8618E',
+    '4-1. 구독비': '#FE5B5B',
+  };
+  let cursor = 0; const stops = model.items.slice(0, 6).map((item, index) => { const end = cursor + item.percent; const stop = `${colors[index % colors.length]} ${cursor}% ${end}%`; cursor = end; return stop; });
+  const reference = $('#overviewDonut');
+  if (reference) { reference.className = 'overview-expense-reference'; reference.innerHTML = renderReferenceDonutWithOptions(model, colors, { itemColors: overviewItemColors }); }
+  const detailCard = $('#donutDetail');
+  if (detailCard) {
+    const detailCharts = ownerOrder.map((owner, ownerIndex) => {
+      const ownerTransactions = transactions.filter((row) => row.owner === owner);
+      const detailModel = buildCategoryChartModel(ownerTransactions);
+      const categoryOrder = categoryOrderByOwner.all || [];
+      const detailNames = detailModel.items.filter((item) => item.name !== '2-0. 쇼핑,의류').map((item) => item.name);
+      const orderedDetailNames = [...(categoryOrder?.filter((name) => detailNames.includes(name)) || []), ...detailNames.filter((name) => !categoryOrder.includes(name))];
+      const detailItems = orderedDetailNames.map((name) => detailModel.items.find((item) => item.name === name)).slice(0, 8);
+      const detailSvg = renderReferenceDonutWithOptions({ ...detailModel, items: detailItems }, colors, {
+        width: 300, height: 220, cx: 150, cy: 105, outerRadius: 86, innerRadius: 49, items: detailItems,
+        itemColors: overviewItemColors,
+        headerText: owner, headerColor: colors[ownerIndex % colors.length],
+      });
+      return `<article class="detail-reference-chart-card" style="--detail-card-color:${colors[ownerIndex % colors.length]}">${detailSvg}</article>`;
+    }).join('');
+    detailCard.innerHTML = `<h3>구분_2 월별</h3><div class="detail-reference-chart-grid">${detailCharts}</div>`;
+  }
+}
+
+function renderInlineTrend() {
+  const model = buildMonthlyChartModel(state.trendTransactions, state.year); const svg = $('#trendChart');
+  if (!svg || !model.values.length) return;
+  const width = 1000; const height = 360; const left = 110; const right = 24; const top = 24; const bottom = 52; const plotW = width - left - right; const plotH = height - top - bottom; const max = Math.max(...model.values, 1); const x = (index) => left + (model.values.length === 1 ? plotW / 2 : (index / (model.values.length - 1)) * plotW); const y = (value) => top + plotH - (value / max) * plotH; const points = model.values.map((value, index) => `${x(index)},${y(value)}`).join(' '); let html = '<defs><linearGradient id="overviewArea" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#405DE6" stop-opacity=".25"/><stop offset="1" stop-color="#833AB4" stop-opacity=".02"/></linearGradient></defs>';
+  [0, .25, .5, .75, 1].forEach((ratio) => { const value = max * ratio; html += `<line class="trend-grid" x1="${left}" x2="${width - right}" y1="${y(value)}" y2="${y(value)}"/><text class="trend-axis" x="${left - 10}" y="${y(value) + 4}" text-anchor="end">${formatWon(value)}</text>`; });
+  html += `<polygon class="trend-area" points="${left},${top + plotH} ${points} ${x(model.values.length - 1)},${top + plotH}"/><polyline class="trend-line" points="${points}"/>`;
+  model.values.forEach((value, index) => { html += `<circle class="trend-dot" cx="${x(index)}" cy="${y(value)}" r="5"/><text class="trend-value" x="${x(index)}" y="${y(value) - 12}" text-anchor="middle">${formatWon(value)}</text><text class="trend-axis" x="${x(index)}" y="${height - 18}" text-anchor="middle">${model.labels[index]}</text>`; });
+  svg.innerHTML = html;
+}
+
+function renderCoreDonut(targetId, transactions, titleColor) {
+  const target = $('#' + targetId);
+  if (!target) return;
+  const model = buildCategoryChartModel(transactions);
+  const colors = ['#405DE6', '#833AB4', '#E1306C', '#FD1D1D', '#F77737', '#FCB045'];
+  let cursor = 0;
+  const stops = model.items.slice(0, 6).map((item, index) => { const end = cursor + item.percent; const stop = `${colors[index % colors.length]} ${cursor}% ${end}%`; cursor = end; return stop; });
+  const background = model.total ? `conic-gradient(${stops.join(',')})` : '#d9dce4';
+  const legend = model.items.slice(0, 4).map((item, index) => `<li><i style="background:${colors[index % colors.length]}"></i><span>${item.name}</span><b>${formatWon(item.value)} · ${item.percent.toFixed(1)}% · ${item.count}건</b></li>`).join('') || '<li class="core-donut-empty">표시할 데이터가 없습니다.</li>';
+  target.innerHTML = `<div class="core-donut" style="background:${background};--core-donut-title:${titleColor}"><div><strong>${formatWon(model.total)}</strong><span>100.0%</span><small>${model.items.reduce((sum, item) => sum + item.count, 0)}건</small></div></div><ul class="core-donut-legend">${legend}</ul>`;
+}
+
+function renderCoreOverviewPanels() {
+  const index = Math.max(0, state.month - 1);
+  const model = state.coreSummary || { income: [], expense: [], saving: [], savingRate: [] };
+  const income = model.income[index] || 0; const expense = model.expense[index] || 0; const saving = model.saving[index] || income - expense; const rate = model.savingRate[index] || 0;
+  $('#coreIncomeKpi').textContent = formatWon(income); $('#coreExpenseKpi').textContent = formatWon(expense); $('#coreSavingKpi').textContent = formatWon(saving); $('#coreSavingSub').textContent = `${rate.toFixed(1)}% 추정 저축률`;
+  $('#coreCountKpi').textContent = state.transactions.filter((row) => row.amount !== 0).length.toLocaleString('ko-KR');
+  document.querySelectorAll('.core-month').forEach((button) => { button.textContent = `${String(state.year).slice(2)}년 ${button.dataset.month}월`; button.classList.toggle('active', Number(button.dataset.month) === state.month); });
+  const incomeRows = state.transactions.map((row) => ({ ...row, amount: Number(row.budget) || 0 })).filter((row) => row.amount > 0);
+  renderCoreDonut('coreIncomeDonut', incomeRows, '#405DE6'); renderCoreDonut('coreExpenseDonut', state.transactions, '#833AB4');
+}
+
+function renderMonthlyDonutPage() {
+  const target = $('#monthlyDonutGrid');
+  if (!target) return;
+  const model = buildMonthlyDonutModel(state.trendTransactions, 12);
+  target.innerHTML = model.rows.map((row) => `<div class="monthly-donut-row"><div class="monthly-donut-label" style="color:${row.color}">${row.label}<small class="monthly-donut-label-budget">예산 ${formatWon(row.budget)}</small></div>${row.values.map((item, index) => { const progress = Math.max(0, Math.min(100, item.rate)); const signedRate = `${item.rate < 0 ? '-' : ''}${Math.abs(item.rate).toFixed(0)}%`; const remaining = item.budget - item.amount; return `<div class="monthly-donut-cell" style="--monthly-donut-color:${row.color}"><div class="monthly-donut-month">${model.labels[index]}</div><div class="monthly-donut" style="--monthly-donut-progress:${progress}%"><strong>${signedRate}</strong></div><small>실사용액 ${formatWon(item.amount)}</small><small>거래건수 ${item.count}건</small><small>잔여액 ${formatWon(remaining)}</small></div>`; }).join('')}</div>`).join('');
+}
+
+// 핵심 요약 레이블 우선순위: 1) 선명한 위치, 2) 차트 경계 안, 3) 기존 레이블과 겹치지 않음.
+// 충돌이 있으면 위·아래·좌·우 후보를 순서대로 탐색하며, 레이블은 서로 겹치면 안 된다.
+function segmentIntersectsRect(segment, rect) {
+  let t0 = 0; let t1 = 1;
+  const dx = segment.x2 - segment.x1; const dy = segment.y2 - segment.y1;
+  const bounds = [[-dx, segment.x1 - rect.x + rect.width / 2], [dx, rect.x + rect.width / 2 - segment.x1], [-dy, segment.y1 - rect.y + rect.height / 2], [dy, rect.y + rect.height / 2 - segment.y1]];
+  for (const [p, q] of bounds) {
+    if (p === 0) { if (q < 0) return false; continue; }
+    const ratio = q / p;
+    if (p < 0) { if (ratio > t1) return false; if (ratio > t0) t0 = ratio; }
+    else { if (ratio < t0) return false; if (ratio < t1) t1 = ratio; }
+  }
+  return t0 <= t1;
+}
+
+function buildSmoothCurve(points) {
+  if (points.length < 2) return { path: points.length ? `M ${points[0].x} ${points[0].y}` : '', samples: points };
+  const tension = 0.18; let path = `M ${points[0].x} ${points[0].y}`; const samples = [points[0]];
+  for (let index = 0; index < points.length - 1; index += 1) {
+    const current = points[index]; const next = points[index + 1]; const previous = points[index - 1] || current; const following = points[index + 2] || next;
+    const control1 = { x: current.x + (next.x - previous.x) * tension, y: current.y + (next.y - previous.y) * tension };
+    const control2 = { x: next.x - (following.x - current.x) * tension, y: next.y - (following.y - current.y) * tension };
+    path += ` C ${control1.x} ${control1.y}, ${control2.x} ${control2.y}, ${next.x} ${next.y}`;
+    for (let step = 1; step <= 8; step += 1) {
+      const t = step / 8; const inverse = 1 - t;
+      samples.push({ x: (inverse ** 3) * current.x + 3 * (inverse ** 2) * t * control1.x + 3 * inverse * (t ** 2) * control2.x + (t ** 3) * next.x, y: (inverse ** 3) * current.y + 3 * (inverse ** 2) * t * control1.y + 3 * inverse * (t ** 2) * control2.y + (t ** 3) * next.y });
+    }
+  }
+  return { path, samples };
+}
+
+function layoutCorePointLabel(center, pointY, boxWidth, boxHeight, preferredOffset, occupied, lineSegments) {
+  const verticalOffsets = [preferredOffset, -96, -76, -56, -36, -16, 16, 36, 56, 76, 96];
+  const horizontalOffsets = [0, -40, 40, -80, 80];
+  const minY = boxHeight / 2 + 4;
+  const maxY = 540 - boxHeight / 2 - 4;
+  const minX = 74 + boxWidth / 2;
+  const maxX = 1170 - boxWidth / 2;
+  const overlaps = (candidate) => occupied.some((item) => candidate.x - candidate.width / 2 < item.x + item.width / 2 && candidate.x + candidate.width / 2 > item.x - item.width / 2 && candidate.y - candidate.height / 2 < item.y + item.height / 2 && candidate.y + candidate.height / 2 > item.y - item.height / 2) || lineSegments.some((segment) => segmentIntersectsRect(segment, candidate));
+  for (const verticalOffset of verticalOffsets) {
+    for (const horizontalOffset of horizontalOffsets) {
+      const candidate = { x: Math.max(minX, Math.min(maxX, center + horizontalOffset)), y: Math.max(minY, Math.min(maxY, pointY + verticalOffset)), width: boxWidth, height: boxHeight };
+      if (!overlaps(candidate)) return candidate;
+    }
+  }
+  return null;
+}
+
+function renderCoreSummary() {
+  const svg = $('#coreSummaryChart');
+  const model = state.coreSummary;
+  const ownerTrend = buildCoreOwnerTrendModel(state.trendTransactions, state.year);
+  if (!svg || !model || !model.labels.length) {
+    if (svg) svg.innerHTML = '<text class="core-empty" x="600" y="250" text-anchor="middle">연동된 월별 데이터가 없습니다.</text>';
+    return;
+  }
+  const width = 1200; const height = 680; const left = 74; const axisX = 38; const right = 30; const base = 620; const top = 72; const bottom = 642;
+  const plotWidth = width - left - right; const lineMax = Math.max(...ownerTrend.series.flatMap((series) => series.values), 1); const x = (index) => left + (model.labels.length === 1 ? plotWidth / 2 : (index / (model.labels.length - 1)) * plotWidth); const lineY = (value) => base - (value / lineMax) * (base - top); const chartPoints = ownerTrend.series.map((series) => series.values.map((value, index) => ({ x: x(index), y: lineY(value) }))); const chartCurves = chartPoints.map((points) => buildSmoothCurve(points)); const lineSegments = chartCurves.flatMap((curve) => curve.samples.slice(1).map((point, index) => ({ x1: curve.samples[index].x, y1: curve.samples[index].y, x2: point.x, y2: point.y })));
+  let html = '<line class="core-axis" x1="' + axisX + '" x2="' + (width - right) + '" y1="' + base + '" y2="' + base + '"/><line class="core-axis" x1="' + axisX + '" x2="' + axisX + '" y1="' + top + '" y2="' + base + '"/>';
+  [0, .5, 1].forEach((ratio) => { const y = base - (base - top) * ratio; html += '<line class="core-grid" x1="' + left + '" x2="' + (width - right) + '" y1="' + y + '" y2="' + y + '"/>'; });
+  const labelOffsets = [-42, -20, 0, 20, 42]; const occupiedLabels = [];
+  ownerTrend.series.forEach((series, seriesIndex) => {
+    html += '<path class="core-owner-line" style="stroke:' + series.color + '" d="' + chartCurves[seriesIndex].path + '"/>';
+    series.values.forEach((value, index) => {
+      if (!value) return;
+      const center = x(index); const pointY = lineY(value); const text = formatWon(value); const boxWidth = Math.max(44, text.length * 7 + 12); const boxHeight = 22; const position = layoutCorePointLabel(center, pointY, boxWidth, boxHeight, -18 + labelOffsets[seriesIndex], occupiedLabels, lineSegments); if (!position) return; occupiedLabels.push(position);
+      html += '<g class="core-point-label" style="color:' + series.color + '"><rect x="' + (position.x - boxWidth / 2) + '" y="' + (position.y - boxHeight / 2) + '" width="' + boxWidth + '" height="' + boxHeight + '" rx="6"/><text x="' + position.x + '" y="' + (position.y + 4) + '" text-anchor="middle">' + text + '</text></g>';
+    });
+  });
+  model.labels.forEach((label, index) => {
+    const center = x(index);
+    const displayLabel = `${String(state.year).slice(2)}년 ${label}`;
+    html += '<text class="core-month-label" x="' + center + '" y="' + (height - 28) + '" text-anchor="middle">' + displayLabel + '</text>';
+  });
+  svg.innerHTML = html;
+}
+
+function renderSheetSummary(transactions) {
+  const summary = state.sheetSummary || { fundsTotal: 0, totalBudget: 0, totalUsed: 0, remainingRate: 0, accounts: [], donuts: [] };
+  const memberColors = { '생활비_11': '#A670C8', '부부_12': '#FE5B5B', '부부외_13': '#F77737' };
+  const memberDonuts = summary.accounts.filter((item) => ['생활비_11', '부부_12', '부부외_13'].includes(item.name));
+  $('#accountRows').className = 'member-donuts';
+  $('#accountRows').innerHTML = memberDonuts.map((item) => {
+    const budget = item.budget || 0;
+    const remaining = item.used || 0;
+    const used = budget - remaining;
+    const rate = budget ? (remaining / budget) * 100 : 0;
+    const progress = Math.max(0, Math.min(100, rate));
+    const color = memberColors[item.name] || '#405DE6';
+    const count = transactions.filter((row) => row.owner === item.name).length;
+    return '<div class="member-donut-item"><div class="sheet-donut top-summary-donut" style="--donut-color:' + color + ';--donut-progress:' + progress + '%"><strong>' + rate.toFixed(0) + '%</strong></div><div class="sheet-donut-meta"><b>' + item.name + '</b><span>예산 ' + formatWon(budget) + '</span><span style="color:' + color + '">실사용액 ' + formatWon(used) + '</span><span>거래건수 ' + count + '건</span><span class="sheet-donut-remaining" style="color:' + color + '">잔여액 ' + formatWon(remaining) + '</span></div></div>';
+  }).join('') || '<div class="empty">구성원 요약을 읽지 못했습니다.</div>';
+  $('#sheetDonuts').innerHTML = summary.donuts.map((donut) => {
+    const amount = transactions.filter((row) => donut.categories?.includes(row.category)).reduce((total, row) => total + row.amount, 0);
+    const budget = donut.budget ?? 0;
+    const summaryDonutColor = donut.name === '성현 용돈' ? '#0A7142' : donut.color;
+    const remaining = budget - amount;
+    const rate = budget ? (remaining / budget) * 100 : 0;
+    const progress = Math.max(0, Math.min(100, rate));
+    const count = transactions.filter((row) => donut.categories?.includes(row.category)).length;
+    return '<div class="sheet-donut-item"><div class="sheet-donut top-summary-donut" style="--donut-color:' + summaryDonutColor + ';--donut-progress:' + progress + '%"><strong>' + rate.toFixed(0) + '%</strong><small>' + count + '건</small></div><div class="sheet-donut-meta"><b>' + donut.name + '</b><span>예산 ' + formatWon(budget) + '</span><span style="color:' + summaryDonutColor + '">실사용액 ' + formatWon(amount) + '</span><span>거래건수 ' + count + '건</span><span class="sheet-donut-remaining" style="color:' + summaryDonutColor + '">잔여액 ' + formatWon(remaining) + '</span></div></div>';
+  }).join('');
+}
+
+function escapeRawText(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
+}
+
+function renderRawDataPage() {
+  const target = $('#rawDataGrid');
+  if (!target) return;
+  const rows = (state.transactions || []).filter((row) => Number(row.amount) !== 0);
+  const summary = state.sheetSummary || { accounts: [] };
+  const accountMap = rows.reduce((map, row) => { const name = row.owner || '미지정'; const current = map.get(name) || { name, used: 0, budget: 0 }; current.used += row.amount; current.budget += row.budget; map.set(name, current); return map; }, new Map());
+  const accounts = summary.accounts.length ? summary.accounts : [...accountMap.values()].sort((a, b) => b.used - a.used);
+  const categoryMap = rows.reduce((map, row) => { const name = row.category || '미분류'; const current = map.get(name) || { name, budget: 0, used: 0 }; current.budget += row.budget; current.used += row.amount; map.set(name, current); return map; }, new Map());
+  const categorySummary = [...categoryMap.values()].sort((a, b) => b.used - a.used);
+  const cardMap = rows.reduce((map, row) => map.set(row.card || '미지정', (map.get(row.card || '미지정') || 0) + row.amount), new Map());
+  const cardTotals = [...cardMap.entries()].sort((a, b) => b[1] - a[1]);
+  const pageCount = Math.max(1, Math.ceil(rows.length / RAW_DATA_PAGE_SIZE));
+  rawDataPageIndex = Math.min(Math.max(rawDataPageIndex, 1), pageCount);
+  const start = (rawDataPageIndex - 1) * RAW_DATA_PAGE_SIZE;
+  const pageRows = rows.slice(start, start + RAW_DATA_PAGE_SIZE);
+  const secondaryRows = rows.filter((row) => (rawSecondaryFilter.owner === '전체' || row.owner === rawSecondaryFilter.owner) && (rawSecondaryFilter.category === '전체' || row.category === rawSecondaryFilter.category));
+  const secondaryPageCount = Math.max(1, Math.ceil(secondaryRows.length / RAW_SECONDARY_PAGE_SIZE));
+  rawSecondaryPageIndex = Math.min(Math.max(rawSecondaryPageIndex, 1), secondaryPageCount);
+  const secondaryPageRows = secondaryRows.slice((rawSecondaryPageIndex - 1) * RAW_SECONDARY_PAGE_SIZE, rawSecondaryPageIndex * RAW_SECONDARY_PAGE_SIZE);
+  const secondaryOwners = ['전체', ...new Set(rows.map((row) => row.owner).filter(Boolean))];
+  const secondaryCategories = ['전체', ...new Set(rows.map((row) => row.category).filter(Boolean))];
+  const weekdayLabel = (day) => { const date = new Date(state.year, state.month - 1, Number(day)); return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('ko-KR', { weekday: 'short' }); };
+  const renderRows = (items) => items.map((row) => `<tr><td class="sheet-cell">${escapeRawText(row.day || '-')}</td><td class="sheet-cell">${escapeRawText(row.owner || '미지정')}</td><td class="sheet-cell">${escapeRawText(row.category || '미분류')}</td><td class="sheet-cell">${escapeRawText(row.card || '미지정')}</td><td class="sheet-cell">${escapeRawText(row.detail || '-')}</td><td class="sheet-cell amount">${formatWon(row.amount)}</td></tr>`).join('') || '<tr><td colspan="6" class="raw-data-empty">표시할 RAW DATA가 없습니다.</td></tr>';
+  const renderCategoryRows = categorySummary.map((item) => { const balance = item.budget - item.used; const rate = item.budget ? Math.round((item.used / item.budget) * 100) : 0; return `<div class="raw-data-account"><span>${escapeRawText(item.name)}</span><b>${formatWon(item.budget)}</b><em>${formatWon(item.used)} · ${formatWon(balance)} · ${rate}%</em></div>`; }).join('');
+  const renderPager = () => { const buttons = Array.from({ length: pageCount }, (_, index) => `<button data-raw-page="${index + 1}" class="${index + 1 === rawDataPageIndex ? 'active' : ''}">${index + 1}</button>`).join(''); return `<span>${rows.length ? `${start + 1}-${Math.min(start + RAW_DATA_PAGE_SIZE, rows.length)} / ${rows.length}건` : '0건'}</span>${buttons}`; };
+  const memberMeta = { 생활비_11: { color: '#d9d4eb', icon: '😊' }, 부부_12: { color: '#f3c5c8', icon: 'YOU' }, 부부외_13: { color: '#f8e2c9', icon: '🤔' }, 봄내_14: { color: '#fff2c6', icon: '🌼' }, 사업_15: { color: '#dcebd2', icon: '▣' } };
+  const memberGroups = [...new Set([...rows.map((row) => row.owner).filter(Boolean), ...accounts.map((item) => item.name)])].map((name) => {
+    const memberRows = rows.filter((row) => row.owner === name);
+    const categories = [...new Map(memberRows.map((row) => [row.category, row])).entries()].map(([category, first]) => ({ category, budget: memberRows.filter((row) => row.category === category).reduce((max, row) => Math.max(max, Number(row.budget) || 0), Number(first.budget) || 0), used: memberRows.filter((row) => row.category === category).reduce((sum, row) => sum + Number(row.amount || 0), 0) }));
+    const account = accounts.find((item) => item.name === name) || { budget: categories.reduce((sum, item) => sum + item.budget, 0), used: memberRows.reduce((sum, row) => sum + Number(row.amount || 0), 0) };
+    return { name, rows: categories, budget: Number(account.budget) || categories.reduce((sum, item) => sum + item.budget, 0), used: Number(account.used) || memberRows.reduce((sum, row) => sum + Number(row.amount || 0), 0), meta: memberMeta[name] || { color: '#e8ecf4', icon: '•' } };
+  });
+  const renderMemberSections = memberGroups.map((group) => {
+    const balance = group.budget - group.used; const rate = group.budget ? Math.round((group.used / group.budget) * 100) : 0;
+    const rowSpan = 4 + group.rows.length;
+    const summary = [['예산', group.budget, '', ''], ['사용액', group.used, '', ''], ['잔액', balance, '', ''], ['사용률', '', '', `${rate}%`]].map(([label, value, unused, rateLabel], index) => `<tr class="sheet-member-section" style="background:${group.meta.color}">${index === 0 ? `<td class="sheet-member-image" rowspan="${rowSpan}">${group.meta.icon}</td><td class="sheet-member-label" rowspan="${rowSpan}">${escapeRawText(group.name)}</td>` : ''}<td class="sheet-summary-label">${label}</td><td class="sheet-summary-value ${value < 0 ? 'sheet-summary-negative' : ''}">${value === '' ? '' : formatWon(value)}</td><td></td><td></td><td class="sheet-summary-rate">${rateLabel}</td></tr>`).join('');
+    const details = group.rows.map((item) => { const itemBalance = item.budget - item.used; const itemRate = item.budget ? Math.round((item.used / item.budget) * 100) : 0; return `<tr class="sheet-detail-row" style="background:${group.meta.color}"><td class="sheet-cell">${escapeRawText(item.category)}</td><td>${formatWon(item.budget)}</td><td>${formatWon(item.used)}</td><td class="${itemBalance < 0 ? 'sheet-summary-negative' : ''}">${formatWon(itemBalance)}</td><td>${itemRate}%</td></tr>`; }).join('');
+    return `${summary}${details}`;
+  }).join('');
+  const renderPaymentRows = cardTotals.map(([name, amount]) => `<div class="sheet-payment-row"><span>${escapeRawText(name)}</span><b>${formatWon(amount)}</b></div>`).join('') || '<div class="sheet-payment-row">결제수단 데이터가 없습니다.</div>';
+  const renderFilterOptions = (values, selected) => values.map((value) => `<option value="${escapeRawText(value)}" ${value === selected ? 'selected' : ''}>${escapeRawText(value)}</option>`).join('');
+  const selectedSecondaryTotal = rawSecondarySelectedRows.size ? secondaryPageRows.reduce((sum, row, index) => rawSecondarySelectedRows.has(index) ? sum + Number(row.amount || 0) : sum, 0) : secondaryRows.reduce((sum, row) => sum + Number(row.amount || 0), 0);
+  const renderSecondaryRows = secondaryPageRows.map((row, index) => `<tr data-raw-secondary-row="${index}" aria-selected="${rawSecondarySelectedRows.has(index)}" class="${rawSecondarySelectedRows.has(index) ? 'raw-secondary-row-selected' : ''}"><td class="sheet-cell">${escapeRawText(row.day || '-')}</td><td class="sheet-cell">${weekdayLabel(row.day)}</td><td class="sheet-cell">${escapeRawText(row.owner || '미지정')}</td><td class="sheet-cell">${escapeRawText(row.category || '미분류')}</td><td class="sheet-cell">${escapeRawText(row.card || '미지정')}</td><td class="sheet-cell">${escapeRawText(row.detail || '-')}</td><td class="sheet-cell amount">${formatWon(row.amount)}</td></tr>`).join('') || '<tr><td colspan="7" class="raw-data-empty">조건에 맞는 거래가 없습니다.</td></tr>';
+  const renderSecondaryPager = secondaryPageCount > 1 ? `<div class="raw-secondary-pager"><span>${secondaryRows.length ? `${(rawSecondaryPageIndex - 1) * RAW_SECONDARY_PAGE_SIZE + 1}-${Math.min(rawSecondaryPageIndex * RAW_SECONDARY_PAGE_SIZE, secondaryRows.length)} / ${secondaryRows.length}건` : '0건'}</span><button data-raw-secondary-page="${Math.max(1, rawSecondaryPageIndex - 1)}" ${rawSecondaryPageIndex === 1 ? 'disabled' : ''}>이전</button>${Array.from({ length: secondaryPageCount }, (_, index) => `<button data-raw-secondary-page="${index + 1}" class="${index + 1 === rawSecondaryPageIndex ? 'active' : ''}">${index + 1}</button>`).join('')}<button data-raw-secondary-page="${Math.min(secondaryPageCount, rawSecondaryPageIndex + 1)}" data-raw-secondary-next ${rawSecondaryPageIndex === secondaryPageCount ? 'disabled' : ''}>다음</button></div>` : '';
+  target.innerHTML = `<article class="raw-data-panel"><h3>원본 거래 <span class="raw-data-sub">${state.year}년 ${state.month}월 · ${rows.length}건</span></h3><div class="raw-data-table-wrap"><table class="raw-data-table"><thead><tr><th class="sheet-header-blue">일</th><th class="sheet-header-blue">구분_1</th><th class="sheet-header-blue">구분_2</th><th class="sheet-header-blue">카드</th><th class="sheet-header-blue">상세 내역</th><th class="sheet-header-blue money">금액</th></tr></thead><tbody>${renderRows(pageRows)}</tbody></table></div></article><article class="raw-data-panel"><h3>구성별 요약 <span class="raw-data-sub">예산 · 사용액 · 잔액 · 사용률</span></h3><table class="sheet-member-table"><thead><tr><th class="sheet-header-blue">구성원</th><th class="sheet-header-blue">상태</th><th class="sheet-header-blue">구분</th><th class="sheet-header-blue">예산</th><th class="sheet-header-blue">사용액</th><th class="sheet-header-blue">잔액</th><th class="sheet-header-blue">사용률</th></tr></thead><tbody>${renderMemberSections}</tbody></table><div class="sheet-payment-block"><h4>결제수단 하단 블록</h4>${renderPaymentRows}</div></article><article class="raw-data-panel sheet-block-secondary"><h3></h3><div class="sheet-filter-line"><select data-raw-secondary-owner>${renderFilterOptions(secondaryOwners, rawSecondaryFilter.owner)}</select><select data-raw-secondary-category>${renderFilterOptions(secondaryCategories, rawSecondaryFilter.category)}</select><span class="raw-data-filter-result">${secondaryRows.length}건</span></div><div class="raw-data-table-wrap"><table class="raw-data-table"><thead><tr><th class="sheet-header-green">일</th><th class="sheet-header-green">요일</th><th class="sheet-header-green">구분_1</th><th class="sheet-header-green">구분_2</th><th class="sheet-header-green">카드</th><th class="sheet-header-green">상세 내역</th><th class="sheet-header-green money">금액</th></tr></thead><tbody>${renderSecondaryRows}</tbody></table></div><div class="raw-secondary-selection-total" aria-live="polite"><i class="raw-secondary-sum-divider" aria-hidden="true"></i><span>SUM</span><b>${formatWon(selectedSecondaryTotal)}</b></div>${renderSecondaryPager}</article>`;
+  const sumDivider = target.querySelector('.raw-secondary-sum-divider');
+  if (sumDivider) {
+    const spanDivider = document.createElement('span');
+    spanDivider.className = 'raw-secondary-sum-divider';
+    spanDivider.setAttribute('aria-hidden', 'true');
+    spanDivider.textContent = 'I';
+    sumDivider.replaceWith(spanDivider);
+  }
+  const secondaryPanel = target.querySelector('.sheet-block-secondary');
+  const selectionTotal = secondaryPanel?.querySelector('.raw-secondary-selection-total');
+  const filterLine = secondaryPanel?.querySelector('.sheet-filter-line');
+  const secondaryPager = secondaryPanel?.querySelector('.raw-secondary-pager');
+  if (secondaryPager && filterLine) filterLine.prepend(secondaryPager);
+  const filterResult = filterLine?.querySelector('.raw-data-filter-result');
+  if (filterResult && selectionTotal) {
+    filterResult.remove();
+    selectionTotal.prepend(filterResult);
+  }
+  if (selectionTotal && filterLine) filterLine.append(selectionTotal);
+  const overviewRawPanel = $('#categories');
+  if (overviewRawPanel) { overviewRawPanel.className = 'card overview-raw-secondary'; overviewRawPanel.innerHTML = target.querySelector('.sheet-block-secondary')?.outerHTML || ''; }
+  $('#rawDataPager').innerHTML = renderPager();
+  document.querySelectorAll('[data-raw-year]').forEach((button) => button.classList.toggle('active', Number(button.dataset.rawYear) === state.year));
+  document.querySelectorAll('[data-raw-month]').forEach((button) => { button.hidden = Number(button.dataset.rawMonth) > monthCount(state.year); button.classList.toggle('active', Number(button.dataset.rawMonth) === state.month); });
+}
+
+function render() {
+  const transactions = activeTransactions();
+  const summary = summarizeLedger(transactions);
+  renderCoreSummary();
+  renderCoreOverviewPanels();
+  renderMonthlyDonutPage();
+  renderRawDataPage();
+  renderInlineTrend();
+  renderSheetSummary(transactions);
+  $('#sourceStatus').textContent = `${state.source} · ${state.lastUpdated ? new Date(state.lastUpdated).toLocaleTimeString('ko-KR') : '대기 중'}`;
+  $('#sourceStatus').className = state.source === 'Google Sheets 자동 연동' ? 'status live' : 'status fallback';
+  if ($('#periodLabel')) $('#periodLabel').textContent = `${state.year}년 ${state.month}월`; if ($('#sheetLabel')) $('#sheetLabel').textContent = sheetName(state.year, state.month);
+  $('#total').textContent = formatWon(summary.total); $('#transactionCount').textContent = transactions.filter((row) => row.amount !== 0).length.toLocaleString('ko-KR'); $('#budget').textContent = formatWon(summary.budget); $('#rate').textContent = `${summary.rate.toFixed(1)}%`;
+  $('#progress').style.width = `${Math.min(summary.rate, 100)}%`; $('#progressText').textContent = `${summary.rate.toFixed(1)}% 사용`;
+  const owners = ['전체', ...new Set(state.transactions.map((row) => row.owner).filter(Boolean))];
+  const categories = ['전체', ...new Set(state.transactions.map((row) => row.category).filter(Boolean))];
+  $('#ownerFilter').innerHTML = owners.map((value) => `<option ${value === state.owner ? 'selected' : ''}>${value}</option>`).join('');
+  $('#categoryFilter').innerHTML = categories.map((value) => `<option ${value === state.category ? 'selected' : ''}>${value}</option>`).join('');
+  const categoryBars = $('#categoryBars'); if (categoryBars) categoryBars.innerHTML = summary.categories.slice(0, 8).map((item) => `<div class="bar-row"><span>${item.name}</span><div class="bar"><i style="width:${summary.total ? (item.amount / summary.total) * 100 : 0}%"></i></div><b>${formatWon(item.amount)}</b></div>`).join('') || '<p class="empty">표시할 지출이 없습니다.</p>';
+  $('#transactionsBody').innerHTML = transactions.filter((row) => row.amount !== 0).slice().reverse().slice(0, 12).map((row) => `<tr><td>${row.owner || '미지정'}</td><td><span class="pill">${row.category}</span></td><td>${row.detail || '-'}</td><td class="money">${formatWon(row.amount)}</td></tr>`).join('') || '<tr><td colspan="4" class="empty">표시할 거래가 없습니다.</td></tr>';
+  renderInlineDonut(transactions, state.sheetSummary?.categoryOrderByOwner);
+  document.querySelectorAll('[data-month]').forEach((button) => { const month = Number(button.dataset.month); button.hidden = month > monthCount(state.year); button.classList.toggle('active', month === state.month); });
+  document.querySelectorAll('[data-year]').forEach((button) => button.classList.toggle('active', Number(button.dataset.year) === state.year));
+}
+
+let syncInFlight = null;
+let pendingSelection = null;
+function latestSyncedMonth(monthRows, fallbackMonth) {
+  const latest = monthRows.reduce((result, payload, index) => payload.transactions.length ? index + 1 : result, 0);
+  return latest || fallbackMonth;
+}
+async function load(year = state.year, month = state.month, selectLatest = arguments.length === 0) {
+  if (syncInFlight) { pendingSelection = { year, month, selectLatest }; return syncInFlight; }
+  $('#syncButton').disabled = true; $('#syncButton').textContent = '동기화 중…';
+  const sync = (async () => {
+    try {
+      const monthRows = await fetchSynchronizedMonths(year);
+      const selection = pendingSelection || { year, month, selectLatest };
+      pendingSelection = null;
+      const resolvedMonth = selection.selectLatest ? latestSyncedMonth(monthRows, selection.month) : selection.month;
+      const stableCategoryOrder = mergeCategoryOrderByOwner(monthRows.map((payload) => payload.sheetSummary));
+      state.year = selection.year; state.month = resolvedMonth; state.transactions = monthRows[resolvedMonth - 1].transactions; state.sheetSummary = { ...monthRows[resolvedMonth - 1].sheetSummary, categoryOrderByOwner: stableCategoryOrder }; state.coreSummary = buildCoreSummaryModel(monthRows.map((payload, index) => ({ month: index + 1, transactions: payload.transactions })), year); state.trendTransactions = monthRows.flatMap((payload, index) => payload.transactions.map((row) => ({ ...row, month: index + 1 }))); state.source = 'Google Sheets 자동 연동';
+    } catch (error) {
+      console.warn(error); const selection = pendingSelection || { year, month, selectLatest }; pendingSelection = null;
+      state.year = selection.year; state.month = selection.month; state.transactions = normalizeRows(sampleRows); state.sheetSummary = null; state.coreSummary = buildCoreSummaryModel([{ month: selection.month, transactions: state.transactions }], selection.year); state.trendTransactions = state.transactions.map((row) => ({ ...row, month: selection.month })); state.source = '샘플 데이터 (연동 실패)';
+    }
+    rawDataPageIndex = 1; rawSecondaryPageIndex = 1; state.lastUpdated = Date.now(); render(); $('#syncButton').disabled = false; $('#syncButton').textContent = '지금 동기화';
+  })();
+  syncInFlight = sync;
+  try { await sync; } finally { if (syncInFlight === sync) syncInFlight = null; }
+}
+
+function handleMonthSelection(button) {
+  const month = Number(button?.dataset.month);
+  if (!Number.isInteger(month) || month < 1 || month > monthCount(state.year)) return;
+  document.querySelectorAll('[data-month]').forEach((item) => item.classList.toggle('active', item === button));
+  load(state.year, month, false);
+}
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-month]'); if (button) handleMonthSelection(button); }, true);
+const donutHoverTooltip = document.createElement('div');
+donutHoverTooltip.className = 'donut-hover-tooltip';
+donutHoverTooltip.setAttribute('role', 'tooltip');
+donutHoverTooltip.hidden = true;
+document.body.append(donutHoverTooltip);
+function findDonutTooltipTarget(node) {
+  return node instanceof Element ? node.closest('[data-donut-tooltip-details]') : null;
+}
+function positionDonutHoverTooltip(event) {
+  const offset = 14;
+  const maxX = Math.max(8, window.innerWidth - donutHoverTooltip.offsetWidth - 8);
+  const maxY = Math.max(8, window.innerHeight - donutHoverTooltip.offsetHeight - 8);
+  donutHoverTooltip.style.left = `${Math.min(event.clientX + offset, maxX)}px`;
+  donutHoverTooltip.style.top = `${Math.min(event.clientY + offset, maxY)}px`;
+}
+document.addEventListener('pointerover', (event) => {
+  const target = findDonutTooltipTarget(event.target);
+  if (!target) return;
+  donutHoverTooltip.innerHTML = target.dataset.donutTooltipDetails.split('|').map((detail) => `<div>${detail}</div>`).join('');
+  donutHoverTooltip.style.backgroundColor = target.dataset.donutTooltipColor;
+  donutHoverTooltip.hidden = false;
+  positionDonutHoverTooltip(event);
+});
+document.addEventListener('pointermove', (event) => {
+  if (!donutHoverTooltip.hidden) positionDonutHoverTooltip(event);
+});
+document.addEventListener('pointerout', (event) => {
+  const target = findDonutTooltipTarget(event.target);
+  if (target && !target.contains(event.relatedTarget)) donutHoverTooltip.hidden = true;
+});
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-year]'); if (button) load(Number(button.dataset.year), Math.min(state.month, monthCount(Number(button.dataset.year)))); });
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-raw-page]'); if (button) { rawDataPageIndex = Number(button.dataset.rawPage); renderRawDataPage(); } });
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-raw-secondary-page]'); if (button) { rawSecondarySelectedRows.clear(); rawSecondaryPageIndex = Number(button.dataset.rawSecondaryPage); renderRawDataPage(); } });
+document.addEventListener('click', (event) => { const row = event.target.closest('[data-raw-secondary-row]'); if (!row) return; const index = Number(row.dataset.rawSecondaryRow); if (rawSecondarySelectedRows.has(index)) rawSecondarySelectedRows.delete(index); else rawSecondarySelectedRows.add(index); renderRawDataPage(); });
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-raw-month]'); if (button) load(state.year, Number(button.dataset.rawMonth)); });
+document.addEventListener('click', (event) => { const button = event.target.closest('[data-raw-year]'); if (button) load(Number(button.dataset.rawYear), Math.min(state.month, monthCount(Number(button.dataset.rawYear)))); });
+document.addEventListener('change', (event) => { const owner = event.target.closest('[data-raw-secondary-owner]'); const category = event.target.closest('[data-raw-secondary-category]'); if (owner) rawSecondaryFilter.owner = owner.value; if (category) rawSecondaryFilter.category = category.value; if (owner || category) { rawSecondarySelectedRows.clear(); rawSecondaryPageIndex = 1; renderRawDataPage(); } });
+    function setScreen(screen) { const main = $('#overview'); const allowed = ['overview', 'core', 'monthly-donuts', 'raw-data']; main.dataset.screen = allowed.includes(screen) ? screen : 'overview'; const coreSummary = $('#coreSummary'); if (coreSummary) coreSummary.hidden = main.dataset.screen !== 'core'; const monthlyDonutPage = $('#monthlyDonutScreen'); if (monthlyDonutPage) monthlyDonutPage.hidden = main.dataset.screen !== 'monthly-donuts'; const rawDataPage = $('#rawDataScreen'); if (rawDataPage) rawDataPage.hidden = main.dataset.screen !== 'raw-data'; document.querySelectorAll('.nav-item[data-screen-link]').forEach((link) => link.classList.toggle('active', link.dataset.screenLink === main.dataset.screen)); }
+document.addEventListener('click', (event) => { const link = event.target.closest('.nav-item[data-screen-link]'); if (!link) return; setScreen(link.dataset.screenLink); });
+$('#syncButton').addEventListener('click', () => load()); $('#ownerFilter').addEventListener('change', (event) => { state.owner = event.target.value; render(); }); $('#categoryFilter').addEventListener('change', (event) => { state.category = event.target.value; render(); });
+const DASHBOARD_DESIGN_WIDTH = 1920; const DASHBOARD_DESIGN_HEIGHT = 984;
+function fitDashboardToViewport() { const viewport = document.getElementById('dashboardViewport'); const app = document.getElementById('dashboardApp'); if (!viewport || !app) return 1; const viewportWidth = Math.max(1, viewport.clientWidth || window.innerWidth || DASHBOARD_DESIGN_WIDTH); const viewportHeight = Math.max(1, viewport.clientHeight || window.innerHeight || DASHBOARD_DESIGN_HEIGHT); const safeZoom = Math.max(0.001, Math.min(viewportWidth / DASHBOARD_DESIGN_WIDTH, viewportHeight / DASHBOARD_DESIGN_HEIGHT, 1)); app.style.transform = 'none'; app.style.transformOrigin = 'top left'; app.style.zoom = safeZoom.toFixed(6); app.dataset.viewportZoom = safeZoom.toFixed(6); return safeZoom; }
+window.addEventListener('resize', fitDashboardToViewport); window.addEventListener('orientationchange', fitDashboardToViewport);
+let autoSyncStarted = false;
+function startAutoSync() {
+  if (autoSyncStarted) return;
+  autoSyncStarted = true;
+  setScreen('overview');
+  render();
+  fitDashboardToViewport();
+  load();
+  setInterval(() => load(), config.refreshMs);
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startAutoSync, { once: true });
+else startAutoSync();
+window.addEventListener('load', startAutoSync, { once: true });
+
+</script>
+</body>
+</html>
