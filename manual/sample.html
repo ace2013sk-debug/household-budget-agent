@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>구글 가계부 매뉴얼</title>
+<meta name="description" content="구글 가계부 대시보드의 주요 기능과 데이터 확인 방법을 10쪽으로 안내합니다.">
+<style>
+:root{--yellow:#FFE81A;--purple:#BF8CFF;--mint:#7EF0A5;--orange:#FF6B45;--cream:#FBF7EF;--ink:#0A0A0A;--bw:5px;--sh:8px;--sb:clamp(150px,16vw,210px)}
+*{box-sizing:border-box;margin:0;padding:0}
+@font-face{font-family:"EmojiOnly";src:local("Apple Color Emoji"),local("Segoe UI Emoji"),local("Noto Color Emoji");unicode-range:U+1F000-1FAFF,U+2600-27BF,U+2B50,U+2B06,U+FE0F,U+200D,U+2728,U+26A1}
+html,body{height:100%;font-family:"EmojiOnly","Pretendard","Noto Sans KR","Malgun Gothic",sans-serif;background:var(--cream);color:var(--ink);overflow:hidden;font-weight:800}
+.app{display:flex;height:100vh}
+/* sidebar */
+.sb{width:var(--sb);flex:0 0 var(--sb);height:100vh;overflow-y:auto;background:var(--cream);border-right:var(--bw) solid var(--ink);padding:12px 10px 16px;transition:transform .2s,margin-left .2s;z-index:5}
+.app.closed .sb{transform:translateX(-100%);margin-left:calc(var(--sb) * -1)}
+.tag{display:inline-block;background:var(--ink);color:#fff;font-size:clamp(11px,1.1vw,14px);padding:4px 10px;letter-spacing:.05em}
+.gh{display:flex;align-items:center;gap:6px;width:100%;margin-top:10px;padding:7px 8px;border:4px solid var(--ink);color:var(--ink);font:inherit;font-size:clamp(12px,1.05vw,14px);cursor:pointer;text-align:left}
+.gh.g0{background:var(--purple)}.gh.g1{background:var(--mint)}
+.gh.cur{box-shadow:3px 3px 0 var(--ink)}
+.gh .ar{width:14px}.gh .nm{flex:1}
+.gh .ct{background:#fff;border:2px solid var(--ink);padding:0 5px;font-size:11px}
+.items{margin:6px 0 0 12px;display:flex;flex-direction:column;gap:5px}
+.items[hidden]{display:none}
+.it{display:block;width:100%;text-align:left;font:inherit;font-size:clamp(11px,.95vw,13px);padding:6px 8px;border:3px solid transparent;background:transparent;color:var(--ink);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it:hover{border-color:var(--ink)}
+.it.on{background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.back{display:block;margin-top:14px;text-decoration:none;color:var(--ink);background:var(--orange);border:4px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:8px;text-align:center;font-size:clamp(12px,1.05vw,14px)}
+/* stage */
+.stage{position:relative;flex:1;min-width:0;height:100vh;overflow:hidden}
+.tools{position:absolute;z-index:8;top:10px;right:14px;display:flex;gap:8px}
+.tb{font:inherit;font-size:clamp(12px,1.1vw,15px);background:var(--yellow);border:var(--bw) solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:5px 12px;cursor:pointer;color:var(--ink)}
+.tb:disabled{opacity:.4;cursor:default}
+.tb[aria-expanded=true]{box-shadow:1px 1px 0 var(--ink);transform:translate(3px,3px)}
+.slide{display:none;position:absolute;inset:0;padding:clamp(54px,9vh,80px) clamp(18px,4vw,64px) clamp(22px,5vh,48px);overflow:hidden}
+.slide.on{display:block}
+.big{color:#fff;font-weight:900;line-height:1.15;letter-spacing:.02em;-webkit-text-stroke:clamp(3px,.4vw,5px) var(--ink);paint-order:stroke fill;text-shadow:clamp(3px,.6vw,7px) clamp(3px,.6vw,7px) 0 var(--ink);font-size:clamp(26px,4.2vw,58px);margin:8px 0 14px;max-width:70%}
+.slide:nth-of-type(5n+2) .big{color:var(--yellow)}.slide:nth-of-type(5n+3) .big{color:var(--mint)}.slide:nth-of-type(5n+4) .big{color:var(--purple)}.slide:nth-of-type(5n+5) .big{color:var(--orange)}
+.big.h1{font-size:clamp(28px,4.2vw,64px);max-width:68%;text-wrap:balance}
+.big .ch{opacity:0}.big .ch.s{opacity:1}
+.big.typing:after,.big.done:after{content:"";display:inline-block;width:.08em;height:.9em;background:var(--ink);margin-left:.1em;vertical-align:-.1em;animation:bl 1s steps(1) infinite}
+.big.typing:after{animation:none}
+@keyframes bl{50%{opacity:0}}
+.sub{font-size:clamp(14px,1.7vw,22px);max-width:62%;line-height:1.5}
+.grid{display:grid;gap:clamp(10px,1.6vw,22px);margin-top:12px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.box{border:var(--bw) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 var(--ink);background:#fff;padding:clamp(8px,1.2vw,16px);font-size:clamp(12px,1.35vw,18px);line-height:1.45}
+.box b{display:block;font-size:1.1em;margin-bottom:4px}
+.y{background:var(--yellow)}.p{background:var(--purple)}.m{background:var(--mint)}.o{background:var(--orange)}.c{background:var(--cream)}.k{background:var(--ink);color:#fff}
+.num{display:inline-block;background:var(--ink);color:#fff;padding:2px 10px;margin-bottom:6px}
+.red{color:#e00000}
+.cast{position:absolute;z-index:1;right:clamp(16px,4vw,64px);top:clamp(54px,9vh,80px);width:clamp(90px,13vw,170px);height:clamp(90px,13vw,170px)}
+.cast.lg{top:50%;transform:translateY(-50%);width:clamp(140px,22vw,300px);height:clamp(140px,22vw,300px)}
+.cast .bd{position:absolute;left:5%;top:5%;width:90%;height:90%;border-radius:50%;border:var(--bw) solid var(--ink);box-shadow:var(--sh) var(--sh) 0 var(--ink)}
+.cast svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.bb{position:absolute;right:calc(clamp(90px,13vw,170px) + 6px);top:calc(clamp(54px,9vh,80px) + 10px);background:#fff;border:4px solid var(--ink);box-shadow:4px 4px 0 var(--ink);padding:6px 10px;font-size:clamp(11px,1.1vw,14px);max-width:20vw;z-index:2}
+.ground{position:absolute;left:0;right:0;bottom:0;height:min(8vh,64px);pointer-events:none;border-top:var(--bw) solid var(--ink);background:var(--mint);z-index:0}
+.slide>*:not(.ground):not(.cast):not(.bb){position:relative;z-index:2}
+.chart{display:flex;align-items:flex-end;gap:clamp(10px,2vw,28px);height:clamp(110px,24vh,210px);padding:6px 10px 0}
+.bar{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;font-size:clamp(11px,1.15vw,15px);text-align:center}
+.bar i{display:block;width:100%;border:4px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform-origin:bottom}
+.bar span{margin-top:6px;line-height:1.2}.bar em{font-style:normal;margin-bottom:4px}
+.pop{animation:pop .7s cubic-bezier(.34,1.56,.64,1) both;animation-delay:calc(var(--i,0)*.12s)}
+.bar em,.lbl{animation:fade .3s both;animation-delay:calc(var(--i,0)*.12s + .6s)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+svg .pop{transform-box:fill-box;transform-origin:center}
+.cap{font-size:clamp(11px,1.05vw,14px);margin-top:6px}
+.dots{position:absolute;left:50%;bottom:calc(min(8vh,64px) + 8px);transform:translateX(-50%);display:flex;gap:8px;z-index:4}
+.dots button{width:14px;height:14px;border:3px solid var(--ink);background:#fff;cursor:pointer;border-radius:50%}
+.dots button.on{background:var(--yellow);transform:scale(1.25)}
+.pg{position:absolute;right:16px;bottom:calc(min(8vh,64px) + 4px);z-index:4;font-size:clamp(12px,1.1vw,15px);background:#fff;border:3px solid var(--ink);padding:0 8px}
+.donutwrap{display:flex;align-items:center;gap:16px}
+.leg{font-size:clamp(11px,1.15vw,15px);line-height:1.7}
+.leg i{display:inline-block;width:14px;height:14px;border:3px solid var(--ink);margin-right:6px;vertical-align:-2px}
+@media(max-width:900px){.sb{position:fixed;left:0;top:0}.app:not(.closed) .sb{box-shadow:6px 0 0 var(--ink)}.app.closed .sb{margin-left:0}.big,.sub{max-width:100%}.g4,.g3{grid-template-columns:repeat(2,1fr)}.cast,.bb{display:none}.slide{overflow-y:auto}}
+@media(prefers-reduced-motion:reduce){.pop,.bar em,.lbl{animation:none}.big .ch{opacity:1}}
+:root.embed .back{display:none}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="coinie" viewBox="0 0 100 100" data-c="1"><circle cx="50" cy="52" r="30" fill="#FFE81A" stroke="#0A0A0A" stroke-width="4"/><text x="50" y="42" text-anchor="middle" font-size="16" font-weight="900" fill="#0A0A0A">₩</text><circle cx="41" cy="57" r="3.5" fill="#0A0A0A"/><circle cx="59" cy="57" r="3.5" fill="#0A0A0A"/><path d="M42 67q8 7 16 0" fill="none" stroke="#0A0A0A" stroke-width="3.5" stroke-linecap="round"/></symbol>
+<symbol id="bookie" viewBox="0 0 100 100" data-c="1"><rect x="26" y="26" width="48" height="52" rx="4" fill="#BF8CFF" stroke="#0A0A0A" stroke-width="4"/><path d="M34 26v52" stroke="#0A0A0A" stroke-width="4"/><circle cx="48" cy="48" r="3.5" fill="#0A0A0A"/><circle cx="62" cy="48" r="3.5" fill="#0A0A0A"/><path d="M50 60q6 6 12 0" fill="none" stroke="#0A0A0A" stroke-width="3.5" stroke-linecap="round"/></symbol>
+<symbol id="heartie" viewBox="0 0 100 100" data-c="1"><path d="M50 78C20 56 22 30 38 28c8 0 12 5 12 9 0-4 4-9 12-9 16 2 18 28-12 50z" fill="#FF6B45" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/><circle cx="42" cy="46" r="3.2" fill="#0A0A0A"/><circle cx="58" cy="46" r="3.2" fill="#0A0A0A"/><path d="M44 56q6 6 12 0" fill="none" stroke="#0A0A0A" stroke-width="3.2" stroke-linecap="round"/></symbol>
+<symbol id="sproutie" viewBox="0 0 100 100" data-c="1"><path d="M30 60h40l-5 22H35z" fill="#FF6B45" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/><path d="M50 60V40M50 44c-12 0-16-10-16-14 10 0 16 5 16 14zM50 40c10 0 16-8 16-14-10 0-16 6-16 14z" fill="#7EF0A5" stroke="#0A0A0A" stroke-width="4" stroke-linejoin="round"/><circle cx="43" cy="68" r="2.8" fill="#0A0A0A"/><circle cx="57" cy="68" r="2.8" fill="#0A0A0A"/></symbol>
+</defs></svg>
+
+<div class="app" id="app">
+<aside class="sb" id="sb"><span class="tag">목차</span><div id="toc"></div><a class="back" href="../">◀ 대시보드로 돌아가기</a></aside>
+<div class="stage">
+<div class="tools"><button class="tb" id="tg" aria-expanded="true" aria-label="사이드바 접기·열기">☰ 목록</button><button class="tb" id="pv">◀</button><button class="tb" id="nx">▶</button></div>
+
+<!-- 1 -->
+<section class="slide" data-group="도입" data-title="표지">
+<span class="tag">TUTORIAL MANUAL</span>
+<h1 class="big h1" data-t="구글 가계부 사용 매뉴얼">구글 가계부 사용 매뉴얼</h1>
+<p class="sub">대시보드의 주요 기능과 주요 데이터를 확인하는 방법을 10쪽으로 안내합니다. 🪙</p>
+<div class="grid g2" style="max-width:56%"><div class="box y">📊 화면 4개 · 📅 기간 필터 · 🤖 챗봇</div><div class="box m">🔄 Google Sheets 자동 연동</div></div>
+<div class="cast lg"><div class="bd" style="background:#CFE3FA"></div><svg><use href="#coinie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 2 -->
+<section class="slide" data-group="도입" data-title="화면 구성 한눈에">
+<span class="tag">01 · 구성</span>
+<h2 class="big" data-t="대시보드는 4개 화면입니다">대시보드는 4개 화면입니다</h2>
+<div class="grid g4">
+<div class="box y"><span class="num">1</span><b>▦ 요약 보기</b>총 지출·거래 건수·예산·사용률과 대분류·소분류 차트</div>
+<div class="box p"><span class="num">2</span><b>↗ 핵심 요약</b>수입·지출·저축 추정과 월별 흐름</div>
+<div class="box m"><span class="num">3</span><b>◔ 월별 차트</b>외식비+장보기, 엄마용돈, 아빠용돈 월별 현황</div>
+<div class="box o"><span class="num">4</span><b>▤ RAW DATA</b>동기화된 시트 원본 데이터와 요약 블록</div>
+</div>
+<div class="box k" style="margin-top:14px;max-width:70%">왼쪽 사이드바의 메뉴를 누르면 화면이 바뀝니다. 아래쪽 「챗봇」 버튼으로 질문할 수 있습니다.</div>
+<div class="cast"><div class="bd" style="background:#FFE29A"></div><svg><use href="#bookie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 3 -->
+<section class="slide" data-group="화면 둘러보기" data-title="요약 보기와 4개 지표">
+<span class="tag">02 · 요약 보기</span>
+<h2 class="big" data-t="4개 지표로 한눈에 보기">4개 지표로 한눈에 보기</h2>
+<div class="grid g4">
+<div class="box y"><b>총 지출</b>선택 조건 기준 합계</div>
+<div class="box p"><b>거래 건수</b>현재 월 기준</div>
+<div class="box m"><b>예산</b>월별 계획 금액</div>
+<div class="box o"><b>사용률</b>지출 ÷ 예산</div>
+</div>
+<div class="grid g2" style="max-width:78%">
+<div class="box c"><b>📈 대분류별 지출</b>도넛 차트와 예산 진행률 막대로 대분류 비중을 봅니다.</div>
+<div class="box c"><b>🔎 소분류별 지출</b>표에서 행을 클릭하면 선택한 행의 합계가 표시됩니다.</div>
+</div>
+<div class="cast"><div class="bd" style="background:#CFE3FA"></div><svg><use href="#coinie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 4 -->
+<section class="slide" data-group="화면 둘러보기" data-title="기간·구성원·분류 필터">
+<span class="tag">03 · 필터</span>
+<h2 class="big" data-t="기간과 필터로 범위 좁히기">기간과 필터로 범위 좁히기</h2>
+<div class="grid g3">
+<div class="box y"><span class="num">1</span><b>연도</b>25년 / 26년 버튼을 누릅니다.</div>
+<div class="box p"><span class="num">2</span><b>월</b>1월~11월 버튼을 누릅니다. 12월은 데이터가 생기면 표시됩니다.</div>
+<div class="box m"><span class="num">3</span><b>구성원·분류</b>상단 선택 상자에서 「전체」 또는 항목을 고릅니다.</div>
+</div>
+<div class="box o" style="margin-top:14px;max-width:70%"><b>🔄 지금 동기화</b>오른쪽 위 버튼을 누르면 시트 데이터를 즉시 다시 불러옵니다.</div>
+<div class="cast"><div class="bd" style="background:#FFDCDC"></div><svg><use href="#heartie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 5 -->
+<section class="slide" data-group="화면 둘러보기" data-title="핵심 요약: 수입·지출·저축">
+<span class="tag">04 · 핵심 요약</span>
+<h2 class="big" data-t="수입−지출로 저축 확인">수입−지출로 저축 확인</h2>
+<div class="grid g2" style="max-width:80%">
+<div class="box c"><b>상단 4개 카드</b>추정 저축액 및 저축 비율 · 수입(월별 예산 기준) · 지출(월별 사용액) · 거래 건수</div>
+<div class="box c"><b>기간 버튼</b>26년 1월~12월 중 월을 선택하고 구성원·분류도 고를 수 있습니다.</div>
+</div>
+<div class="box" style="max-width:56%;margin-top:14px"><b>월별 구성원별 지출 흐름</b>
+<div class="chart" style="height:clamp(90px,18vh,150px)">
+<div class="bar"><i class="pop" style="--i:0;height:100%;background:var(--yellow)"></i><span>생활비</span></div>
+<div class="bar"><i class="pop" style="--i:1;height:100%;background:var(--purple)"></i><span>부부</span></div>
+<div class="bar"><i class="pop" style="--i:2;height:100%;background:var(--mint)"></i><span>부부외</span></div>
+<div class="bar"><i class="pop" style="--i:3;height:100%;background:var(--orange)"></i><span>자녀</span></div>
+<div class="bar"><i class="pop" style="--i:4;height:100%;background:var(--cream)"></i><span>사업</span></div>
+</div><div class="cap">구조 안내용 도식(수치 없음): 꺾은선 차트에 표시되는 5개 구분입니다. 오른쪽에는 수입 상세·지출 상세 도넛이 있습니다.</div></div>
+<div class="cast"><div class="bd" style="background:#7EF0A5"></div><svg><use href="#sproutie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 6 -->
+<section class="slide" data-group="화면 둘러보기" data-title="월별 차트: 예산 대비 사용">
+<span class="tag">05 · 월별 차트</span>
+<h2 class="big" data-t="3개 항목의 월별 도넛">3개 항목의 월별 도넛</h2>
+<div class="box" style="max-width:62%"><b>항목별 월 예산 (단위: 원)</b>
+<div class="chart">
+<div class="bar"><em>1,000,000</em><i class="pop" style="--i:0;height:100%;background:var(--purple)"></i><span>외식비+장보기</span></div>
+<div class="bar"><em>300,000</em><i class="pop" style="--i:1;height:30%;background:var(--yellow)"></i><span>엄마용돈</span></div>
+<div class="bar"><em>300,000</em><i class="pop" style="--i:2;height:30%;background:var(--mint)"></i><span>아빠용돈</span></div>
+</div><div class="cap">값은 대시보드에 설정된 월 예산입니다.</div></div>
+<div class="grid g2" style="max-width:78%"><div class="box y">상단 연도 버튼(25년·26년)으로 연도를 바꿉니다.</div><div class="box m">월마다 도넛이 표시되며, 예산 대비 사용 현황을 확인합니다.</div></div>
+<div class="cast"><div class="bd" style="background:#FFE29A"></div><svg><use href="#coinie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 7 -->
+<section class="slide" data-group="데이터 확인" data-title="RAW DATA 보는 법">
+<span class="tag">06 · RAW DATA</span>
+<h2 class="big" data-t="원본 데이터 확인하기">원본 데이터 확인하기</h2>
+<div class="grid g4">
+<div class="box y"><span class="num">1</span><b>기간 선택</b>연도·월 버튼을 누릅니다.</div>
+<div class="box p"><span class="num">2</span><b>표 읽기</b>구분, 분류, 카드, 상세 내역, 금액, 예산 열을 확인합니다.</div>
+<div class="box m"><span class="num">3</span><b>페이지 이동</b>표 아래 페이지 버튼으로 이동합니다.</div>
+<div class="box o"><span class="num">4</span><b>상태 표시</b>오른쪽 위 「Google Sheets 자동 연동」 표시</div>
+</div>
+<div class="box k" style="margin-top:14px;max-width:70%">요약 보기의 소분류 표에서는 행을 클릭해 여러 건의 합계를 바로 확인할 수 있습니다.</div>
+<div class="cast"><div class="bd" style="background:#CFE3FA"></div><svg><use href="#bookie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 8 -->
+<section class="slide" data-group="데이터 확인" data-title="데이터 연동·동기화">
+<span class="tag">07 · 연동</span>
+<h2 class="big" data-t="시트와 자동으로 연결됩니다">시트와 자동으로 연결됩니다</h2>
+<div class="box" style="max-width:66%"><b>데이터 흐름</b>
+<div class="grid g3" style="margin-top:6px">
+<div class="box y pop" style="--i:0">📄 Google Sheets<br><small>구분_1 · 구분_2 · 카드 · 상세 내역 · 금액 · 예산</small></div>
+<div class="box p pop" style="--i:1">🔄 5분마다 자동 새로고침<br><small>「지금 동기화」로 즉시 갱신</small></div>
+<div class="box m pop" style="--i:2">📊 대시보드 4개 화면<br><small>요약·핵심·월별·RAW</small></div>
+</div></div>
+<div class="grid g2" style="max-width:78%">
+<div class="box c"><b>값이 안 보일 때</b>상단 상태 표시가 「데이터 연결 대기 중」인지 확인하고 「지금 동기화」를 누릅니다.</div>
+<div class="box c"><b>그래도 안 보이면</b>시트 공유 설정(읽기 권한)과 네트워크 연결을 확인합니다. <span class="red">[확인 필요]</span></div>
+</div>
+<div class="cast"><div class="bd" style="background:#FFDCDC"></div><svg><use href="#heartie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<!-- 9 -->
+<section class="slide" data-group="챗봇·마무리" data-title="챗봇 사용법">
+<span class="tag">08 · 챗봇</span>
+<h2 class="big" data-t="챗봇에게 물어보세요">챗봇에게 물어보세요</h2>
+<div class="grid g4">
+<div class="box y"><span class="num">1</span><b>열기</b>사이드바 아래 「챗봇」 버튼을 누릅니다.</div>
+<div class="box p"><span class="num">2</span><b>질문 선택</b>자주 하는 질문 10개 중 하나를 누르거나 직접 입력합니다.</div>
+<div class="box m"><span class="num">3</span><b>상세 페이지</b>답변의 「상세 페이지」 버튼으로 이 매뉴얼의 해당 쪽을 엽니다.</div>
+<div class="box o"><span class="num">4</span><b>이동·크기</b>제목 줄을 끌어 이동, 오른쪽 아래 모서리를 끌어 크기를 바꿉니다.</div>
+</div>
+<div class="cast"><div class="bd" style="background:#FFE29A"></div><svg><use href="#coinie"/></svg></div>
+<div class="bb">궁금한 건 챗봇에게!</div>
+<div class="ground"></div>
+</section>
+
+<!-- 10 -->
+<section class="slide" data-group="챗봇·마무리" data-title="마무리·자주 묻는 질문">
+<span class="tag">09 · 정리</span>
+<h2 class="big" data-t="핵심만 다시 정리합니다">핵심만 다시 정리합니다</h2>
+<div class="grid g3" style="max-width:78%">
+<div class="box y"><b>📊 지표 보기</b>요약 보기 → 4개 지표</div>
+<div class="box p"><b>📅 범위 바꾸기</b>연도·월·구성원·분류</div>
+<div class="box m"><b>🧾 원본 확인</b>RAW DATA 화면</div>
+<div class="box o"><b>🔄 최신화</b>지금 동기화(5분 자동)</div>
+<div class="box c"><b>🤖 도움받기</b>챗봇 → 상세 페이지</div>
+<div class="box k"><b>📖 다시 보기</b>사이드바 「매뉴얼」</div>
+</div>
+<div class="cast lg" style="right:clamp(16px,3vw,48px);top:62%"><div class="bd" style="background:#7EF0A5"></div><svg><use href="#sproutie"/></svg></div>
+<div class="ground"></div>
+</section>
+
+<div class="dots" id="dots"></div><div class="pg" id="pg"></div>
+</div>
+</div>
+
+<script>
+(function(){
+var slides=[].slice.call(document.querySelectorAll('.slide')),N=slides.length,cur=0,app=document.getElementById('app'),
+toc=document.getElementById('toc'),tg=document.getElementById('tg'),pv=document.getElementById('pv'),nx=document.getElementById('nx'),
+dots=document.getElementById('dots'),pg=document.getElementById('pg'),timer=null,collapsed={},groups=[],items=[];
+if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('embed');
+var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;
+slides.forEach(function(s,i){var g=s.dataset.group;if(!groups.length||groups[groups.length-1].name!==g)groups.push({name:g,idx:[]});groups[groups.length-1].idx.push(i);});
+groups.forEach(function(g,gi){
+ var h=document.createElement('button');h.className='gh g'+(gi%2);h.setAttribute('aria-expanded','false');
+ h.innerHTML='<span class="ar">▸</span><span class="nm">'+g.name+'</span><span class="ct">'+g.idx.length+'쪽</span>';
+ var box=document.createElement('div');box.className='items';
+ g.idx.forEach(function(i){var b=document.createElement('button');b.className='it';b.textContent=(i+1)+'. '+slides[i].dataset.title;b.onclick=function(){go(i)};box.appendChild(b);items[i]=b;});
+ h.onclick=function(){var open=box.hidden;box.hidden=!open;collapsed[gi]=!open;h.setAttribute('aria-expanded',open);h.firstChild.textContent=open?'▾':'▸'};
+ g.h=h;g.box=box;toc.appendChild(h);toc.appendChild(box);
+});
+slides.forEach(function(s,i){var d=document.createElement('button');d.setAttribute('aria-label',(i+1)+'쪽');d.onclick=function(){go(i)};dots.appendChild(d);});
+function typeTitle(s){
+ var t=s.querySelector('.big');if(!t)return;clearInterval(timer);var txt=t.dataset.t||t.textContent;
+ if(reduce){t.textContent=txt;t.className=t.className.replace(/ ?(typing|done)/g,'');return;}
+ t.innerHTML=txt.split('').map(function(c){return '<span class="ch">'+(c===' '?'&nbsp;':c)+'</span>'}).join('');
+ t.classList.remove('done');t.classList.add('typing');var cs=t.querySelectorAll(".ch"),k=0;
+ timer=setInterval(function(){if(k<cs.length){cs[k++].classList.add('s')}else{clearInterval(timer);t.classList.remove('typing');t.classList.add('done')}},60);
+}
+function go(i){
+ if(i<0||i>=N)return;cur=i;
+ slides.forEach(function(s,k){s.classList.toggle('on',k===i)});
+ items.forEach(function(b,k){b.classList.toggle('on',k===i)});
+ [].slice.call(dots.children).forEach(function(d,k){d.classList.toggle('on',k===i)});
+ groups.forEach(function(g){var has=g.idx.indexOf(i)>-1;g.h.classList.toggle('cur',has);
+  if(has){g.box.hidden=false;g.h.setAttribute('aria-expanded','true');g.h.firstChild.textContent='▾';}
+  else if(!collapsed.hasOwnProperty(groups.indexOf(g))||collapsed[groups.indexOf(g)]!==false){g.box.hidden=true;g.h.setAttribute('aria-expanded','false');g.h.firstChild.textContent='▸';}
+ });
+ var it=items[i];if(it&&it.scrollIntoView)it.scrollIntoView({block:'nearest'});
+ pv.disabled=i===0;nx.disabled=i===N-1;pg.textContent=(i+1)+' / '+N;
+ try{history.replaceState(null,'','#'+(i+1))}catch(e){}
+ typeTitle(slides[i]);
+}
+pv.onclick=function(){go(cur-1)};nx.onclick=function(){go(cur+1)};
+function tgl(){var c=app.classList.toggle('closed');tg.setAttribute('aria-expanded',!c)}
+tg.onclick=tgl;
+document.addEventListener('keydown',function(e){
+ if(e.key==='ArrowLeft')go(cur-1);else if(e.key==='ArrowRight')go(cur+1);else if(e.key==='s'||e.key==='S')tgl();
+});
+if(window.innerWidth<=900){app.classList.add('closed');tg.setAttribute('aria-expanded','false')}
+var h=parseInt((location.hash||'').replace('#',''),10);
+go(h>=1&&h<=N?h-1:0);
+window.addEventListener('hashchange',function(){var x=parseInt((location.hash||'').replace('#',''),10);if(x>=1&&x<=N&&x-1!==cur)go(x-1)});
+})();
+</script>
+</body>
+</html>
